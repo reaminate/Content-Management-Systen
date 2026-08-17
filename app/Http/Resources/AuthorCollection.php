@@ -14,6 +14,15 @@ class AuthorCollection extends ResourceCollection
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'date'=>$this->collection->map(fn($author)=>[
+                'id' => $author->id,
+                'name'=>(string)$author->name,
+                'email' =>(string)$author->email,
+                'biography' => $author->short_biography,
+                'profile_pic' => ImageResource::make($author->whenLoaded('image')),
+                'blogs_written' => BlogCollection::make($author->whenLoaded('blogs')),
+            ])->all()
+        ];
     }
 }

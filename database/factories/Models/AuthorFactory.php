@@ -24,8 +24,15 @@ class AuthorFactory extends Factory
             'name' => fake()->name(),
             'email'=> fake()->unique()->safeEmail(),
             'short_biography' => fake()->realTextBetween(100, 500),
-            'profile_pic'=> $this->faker->randomElement(Image::pluck('id')),
+            'profile_pic'=> $this->faker->randomElement(Image::where('for_author', false)->pluck('id')),
             'active' => fake()->boolean(70)
         ];
     }
+    public function configure(): static
+    {
+        return $this->afterCreating(function (Author $author) {
+            $author->image->update(['for_author' => true]);
+        });
+    }
+
 }

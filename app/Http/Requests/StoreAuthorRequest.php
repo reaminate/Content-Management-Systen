@@ -12,7 +12,7 @@ class StoreAuthorRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,7 +23,10 @@ class StoreAuthorRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ['required','string'],
+            'email' => ['required', 'email', 'unique:authors,email'],
+            'short_biography' => ['required','string'],
+            'profile_pic'=>['required', 'integer', 'exists:images,id'],
         ];
     }
 }

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->longText('file_path');
             $table->enum('file_type', ['image/jpeg', 'image/png', 'image/jpg']);
             $table->integer('filesize');
+            $table->boolean('for_author')->default(false);
             $table->string('caption');
             $table->date('upload_date');
             $table->timestamps();

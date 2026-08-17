@@ -5,17 +5,20 @@ namespace App\Http\Controllers;
 use App\Models\Image;
 use App\Http\Requests\StoreImageRequest;
 use App\Http\Requests\UpdateImageRequest;
+use Illuminate\Http\Request;
 
 class ImageController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $images = Image::all();
-
-        return response()->json($images);
+        if($request->has('author')){
+            $images->where('for_author', '=', null);
+        }
+        return response($images->toResourceCollection());
     }
 
     /**
@@ -29,9 +32,19 @@ class ImageController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Image $image)
+    public function show(Image $image, Request $request)
     {
-        //
+        if($request->has('author')){
+            $image->load('author');
+        }
+        if($request->has('blogs')){
+            $image->load('blogs');
+        }
+        if($request->has('pages')){
+            $image->load('pages');
+        }
+
+        return response($image->toResource(), 200);
     }
 
     /**

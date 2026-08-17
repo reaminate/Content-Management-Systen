@@ -12,5 +12,5 @@ Route::apiResource('category', CategoryController::class);
 Route::apiResource('image', ImageController::class);
 Route::apiResource('tag', TagController::class);
 Route::apiResource('blog', BlogController::class);
-Route::apiResource('Author', AuthorController::class);
-Route::apiResource('Page', PageController::class);
+Route::apiResource('author', AuthorController::class);
+Route::apiResource('page', PageController::class);

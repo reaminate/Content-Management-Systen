@@ -14,6 +14,16 @@ class ImageResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'og_filename' => $this->original_filename,
+            'stored_filename'=> $this->stored_filename,
+            'file_type' => $this->file_type,
+            'for_author'=> $this->for_author,
+            'caption' => $this->caption,
+            'profile_pic' => AuthorResource::make($this->whenLoaded('author')),
+            'blogs_image' => BlogCollection::make($this->whenLoaded('blogs')),
+            'page_image' => PageCollection::make($this->whenLoaded('pages')),
+        ];
     }
 }

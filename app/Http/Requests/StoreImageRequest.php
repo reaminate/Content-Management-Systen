@@ -23,7 +23,10 @@ class StoreImageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'stored_filename'=>['required', 'unique:images,stored_filename', 'string'],
+            'file_path'=>['file', 'mimes:png,jpg,jpeg'],
+            'caption' => 'string',
+            'upload_date'=>['required', 'date']
         ];
     }
 }

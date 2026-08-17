@@ -14,6 +14,13 @@ class AuthorResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'name'=>(string)$this->name,
+            'email' =>(string)$this->email,
+            'biography' => $this->short_biography,
+            'profile_pic' => ImageResource::make($this->whenLoaded('image')),
+            'blogs_written' => BlogCollection::make($this->whenLoaded('blogs')),
+        ];
     }
 }

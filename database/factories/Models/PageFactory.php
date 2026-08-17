@@ -22,8 +22,8 @@ class PageFactory extends Factory
     {
         return [
             'title' => fake()->text(200),
-            'content'=> fake()->paragraph(10, true),
-            'content_image' => $this->faker->randomElement(Image::pluck('id')),
+            'content'=> fake()->paragraph(3, true),
+            'content_image' => $this->faker->randomElement(Image::where('for_author',false)->pluck('id')),
             'description' => fake()->text(100),
             'publication_status' => fake()->randomElement(['draft', 'published', 'archived']),
             'published_date' => fake()->optional(0.7)->date('y-m-d', 'now'),

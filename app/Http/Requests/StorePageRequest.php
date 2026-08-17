@@ -23,7 +23,12 @@ class StorePageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title'=>['string', 'required', 'unique:pages,title'],
+            'content'=>['string', 'required'],
+            'content_image'=>['nullable', 'exists:images,id'],
+            'description'=>['string', 'required'],
+            'SEO_title'=>['string', 'required', 'unique:pages,SEO_title'],
+            'SEO_description'=>['string','unique'],
         ];
     }
 }

@@ -20,7 +20,7 @@ class CategoryFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->title,
+            'name' => fake()->sentence(10, true),
             'description'=>fake()->sentence(20, true),
             'active_status' => fake()->boolean(90),
         ];

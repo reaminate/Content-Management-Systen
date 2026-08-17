@@ -15,7 +15,7 @@ class Author extends Model
     use HasFactory;
     protected $fillable = ['name', 'email', 'short_biography', 'profile_pic'];
 
-    public function blog(): HasMany
+    public function blogs(): HasMany
     {
         return $this->hasMany(Blog::class, 'author_id');
     }

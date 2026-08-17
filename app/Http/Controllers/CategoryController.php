@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
+use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
@@ -13,9 +14,9 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
+        $categories = Category::all()->toResourceCollection();
 
-        return response()->json($categories,200);
+        return response($categories,200);
     }
 
     /**
@@ -23,15 +24,20 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
-        //
+        $validated = $request->validated();
+        $category = Category::create($validated);
+        return response(200);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Category $category)
+    public function show(Category $category, Request $request)
     {
-        //
+        if ($request->has('blogs')){
+            $category->load('blog');
+        }
+        return response($category->toResource(),200);
     }
 
     /**

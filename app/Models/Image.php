@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+
 
 class Image extends Model
 {
@@ -12,9 +15,9 @@ class Image extends Model
     use HasFactory;
     protected $fillable = ['stored_filename', 'caption', 'file_path', 'upload_date'];
 
-    public function authors(): HasMany
+    public function author(): HasOne
     {
-        return $this->hasMany(Author::class, 'profile_pic');
+        return $this->hasOne(Author::class, 'profile_pic');
     }
     public function blogs(): HasMany
     {

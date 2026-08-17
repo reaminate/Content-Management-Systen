@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Author;
 use App\Http\Requests\StoreAuthorRequest;
 use App\Http\Requests\UpdateAuthorRequest;
-
+use Illuminate\Http\Request;
 class AuthorController extends Controller
 {
     /**
@@ -13,7 +13,7 @@ class AuthorController extends Controller
      */
     public function index()
     {
-        $authors = Author::all();
+        $authors = Author::all()->toResourceCollection();
 
         return response()->json($authors);
     }
@@ -23,15 +23,25 @@ class AuthorController extends Controller
      */
     public function store(StoreAuthorRequest $request)
     {
-        //
+        $validated = $request->validated();
+
+        Author::create($validated);
+
+        return response()->json(200);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Author $author)
+    public function show(Author $author, Request $request)
     {
-        //
+        if($request->has('profile_pic')){
+            $author->load('image');
+        }
+        if($request->has('blogs')){
+            $author->load('blogs');
+        }
+        return response($author->toResource(), 200);
     }
 
     /**
