@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class CategoryFactory extends Factory
 {
+    protected $model = Category::class;
+
     /**
      * Define the model's default state.
      *
@@ -18,7 +20,9 @@ class CategoryFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => fake()->title,
+            'description'=>fake()->sentence(20, true),
+            'active_status' => fake()->boolean(90),
         ];
     }
 }

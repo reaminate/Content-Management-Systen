@@ -18,8 +18,8 @@ return new class extends Migration
             $table->foreignId('category_id')->constrained('categories', 'id')->cascadeOnDelete();
             $table->string('excerpt');
             $table->string('content');
-            $table->foreignId('image')->constrained('images', 'id')->cascadeOnDelete();
-            $table->foreignId('author')->constrained('authors', 'id')->cascadeOnDelete();
+            $table->foreignId('image_id')->constrained('images', 'id')->cascadeOnDelete();
+            $table->foreignId('author_id')->constrained('authors', 'id')->cascadeOnDelete();
             $table->timestamps();
         });
     }

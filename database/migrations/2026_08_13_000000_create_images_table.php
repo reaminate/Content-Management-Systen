@@ -16,10 +16,9 @@ return new class extends Migration
             $table->string('original_filename');
             $table->string('stored_filename')->unique();
             $table->longText('file_path');
-            $table->enum('file_type', ['image/jpeg', 'image/png', 'image/svg']);
+            $table->enum('file_type', ['image/jpeg', 'image/png', 'image/jpg']);
             $table->integer('filesize');
             $table->string('caption');
-            $table->string('image_for');
             $table->date('upload_date');
             $table->timestamps();
         });

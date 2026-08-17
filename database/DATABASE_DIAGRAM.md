@@ -9,6 +9,7 @@ erDiagram
     IMAGES ||--o{ BLOGS : "illustrates"
     IMAGES ||--o{ AUTHORS : "profile picture"
     IMAGES ||--o{ PAGES : "content image"
+    AUTHORS ||--o{ BLOGS : "writes"
     BLOGS ||--o{ BLOG_TAGS : "has many"
     TAGS ||--o{ BLOG_TAGS : "has many"
 
@@ -37,7 +38,7 @@ erDiagram
         string original_filename
         string stored_filename UK
         longtext file_path
-        enum file_type "image/jpeg, image/png, image/svg"
+        enum file_type "image/jpeg, image/png"
         int filesize
         string caption
         string image_for
@@ -71,6 +72,7 @@ erDiagram
         string excerpt
         string content
         bigint image FK
+        bigint author FK
         timestamps timestamps
     }
 
@@ -102,13 +104,9 @@ erDiagram
 | `blogs.image` | `images.id` | many-to-one | `image` | cascade |
 | `authors.profile_pic` | `images.id` | many-to-one | `profile_pic` | cascade |
 | `pages.content_image` | `images.id` | many-to-one | `content_image` | cascade |
+| `blogs.author` | `authors.id` | many-to-one | `author` | cascade |
 | `blog_tags.blog_id` | `blogs.id` | many-to-one | `blog_id` | cascade |
 | `blog_tags.tag_id` | `tags.id` | many-to-one | `tag_id` | cascade |
 
 `blogs` and `tags` are joined through the `blog_tags` pivot table (composite PK on `blog_id` + `tag_id`), forming a many-to-many relationship.
 
-## Notes / observations
-
-- `authors` is not currently linked to `blogs` (no `author_id` FK on `blogs`) — blog authorship isn't modeled yet.
-- `users` has no foreign keys tying it to `blogs`, `pages`, `authors`, etc. — it appears to be used only for CMS login/auth, separate from the `authors` entity.
-- `blogs.image` and `authors.profile_pic` are FK columns not suffixed with `_id`, unlike Laravel's usual convention (`category_id`, `content_image` on `pages` also breaks the pattern).

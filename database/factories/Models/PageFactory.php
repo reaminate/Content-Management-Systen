@@ -2,6 +2,7 @@
 
 namespace Database\Factories\Models;
 
+use App\Models\Image;
 use App\Models\Page;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -10,6 +11,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class PageFactory extends Factory
 {
+    protected $model = Page::class;
+
     /**
      * Define the model's default state.
      *
@@ -18,7 +21,14 @@ class PageFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'title' => fake()->text(200),
+            'content'=> fake()->paragraph(10, true),
+            'content_image' => $this->faker->randomElement(Image::pluck('id')),
+            'description' => fake()->text(100),
+            'publication_status' => fake()->randomElement(['draft', 'published', 'archived']),
+            'published_date' => fake()->optional(0.7)->date('y-m-d', 'now'),
+            'SEO_title' => fake()->text(100),
+            'SEO_description' => fake()->sentence(3, true),
         ];
     }
 }

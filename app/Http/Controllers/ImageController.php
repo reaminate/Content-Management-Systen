@@ -13,7 +13,9 @@ class ImageController extends Controller
      */
     public function index()
     {
-        //
+        $images = Image::all();
+
+        return response()->json($images);
     }
 
     /**

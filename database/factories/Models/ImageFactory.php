@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class ImageFactory extends Factory
 {
+    protected $model = Image::class;
+
     /**
      * Define the model's default state.
      *
@@ -17,8 +19,15 @@ class ImageFactory extends Factory
      */
     public function definition(): array
     {
+        $fixture = fake()->randomElement(
+            glob(base_path('tests/Fixtures/images') . '/*.{jpg,jpeg,png}', GLOB_BRACE)
+        );
+
         return [
-            //
+            'stored_filename' => fake()->text(50),
+            'caption' => fake()->text(50),
+            'upload_date' => fake()->date('Y-m-d', 'now'),
+            'file_path' => $fixture,
         ];
     }
 }

@@ -3,6 +3,7 @@
 namespace Database\Factories\Models;
 
 use App\Models\Author;
+use App\Models\Image;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -10,6 +11,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class AuthorFactory extends Factory
 {
+    protected $model = Author::class;
+
     /**
      * Define the model's default state.
      *
@@ -18,7 +21,11 @@ class AuthorFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => fake()->name(),
+            'email'=> fake()->unique()->safeEmail(),
+            'short_biography' => fake()->realTextBetween(100, 500),
+            'profile_pic'=> $this->faker->randomElement(Image::pluck('id')),
+            'active' => fake()->boolean(70)
         ];
     }
 }
