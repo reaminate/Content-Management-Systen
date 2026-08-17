@@ -14,6 +14,11 @@ class TagCollection extends ResourceCollection
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'data' => $this->collection->map(fn($tag)=>[
+                'name' => $tag->name,
+                'blogs' => BlogCollection::make($tag->whenLoaded('blogs')),
+            ])->all(),
+        ];
     }
 }

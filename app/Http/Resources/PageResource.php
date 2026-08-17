@@ -14,6 +14,14 @@ class PageResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'title' => $this->title,
+            'content' => $this->content,
+            'content_image'=> $this->content_image??null,
+            'description'=> $this->description,
+            'publication_status' => $this->publication_status,
+            'SEO_title' => $this->SEO_title,
+            'image'=> ImageResource::collection($this->whenLoaded('image')),
+        ];
     }
 }

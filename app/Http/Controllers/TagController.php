@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Models\Tag;
 use App\Http\Requests\StoreTagRequest;
 use App\Http\Requests\UpdateTagRequest;
@@ -29,9 +30,12 @@ class TagController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Tag $tag)
+    public function show(Tag $tag, Request $request)
     {
-        //
+        if($request->has('blogs')) {
+            $tag->load('blogs');
+        }
+        return response($tag->toResource());
     }
 
     /**

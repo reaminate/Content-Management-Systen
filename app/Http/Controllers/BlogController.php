@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Blog;
 use App\Http\Requests\StoreBlogRequest;
 use App\Http\Requests\UpdateBlogRequest;
+use Illuminate\Http\Request;
 
 class BlogController extends Controller
 {
@@ -13,9 +14,9 @@ class BlogController extends Controller
      */
     public function index()
     {
-        $blog = Blog::all();
+        $blog = Blog::all()->toResourceCollection();
 
-        return response()->json($blog);
+        return response($blog);
     }
 
     /**
@@ -29,9 +30,21 @@ class BlogController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Blog $blog)
+    public function show(Blog $blog, Request $request)
     {
-        //
+        if($request->has('tags')) {
+            $blog->load('tags');
+        }
+        if($request->has('author')) {
+            $blog->load('author');
+        }
+        if($request->has('image')) {
+            $blog->load('image');
+        }
+        if($request->has('category')) {
+            $blog->load('category');
+        }
+        return response($blog->toResource());
     }
 
     /**

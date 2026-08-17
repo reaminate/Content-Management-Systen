@@ -2,15 +2,17 @@
 
 namespace Database\Factories\Models;
 
-use App\Models\Category;
+use App\Models\Blog;
+use App\Models\Blog_tag;
+use App\Models\Tag;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<Category>
+ * @extends Factory<Blog_tag>
  */
-class CategoryFactory extends Factory
+class Blog_tagFactory extends Factory
 {
-    protected $model = Category::class;
+    protected $model = Blog_tag::class;
 
     /**
      * Define the model's default state.
@@ -20,9 +22,8 @@ class CategoryFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->sentence(10,true),
-            'description'=>fake()->sentence(20, true),
-            'active_status' => fake()->boolean(90),
+            'blog_id' => Blog::factory(),
+            'tag_id' => Tag::factory(),
         ];
     }
 }

@@ -14,6 +14,16 @@ class PageCollection extends ResourceCollection
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'data' => $this->collection->map(fn($page)=>[
+                'title' => $page->title,
+                'content' => $page->content,
+                'content_image'=> $page->content_image??null,
+                'description'=> $page->description,
+                'publication_status' => $page->publication_status,
+                'SEO_title' => $page->SEO_title,
+                'image'=> ImageResource::collection($page->whenLoaded('image')),
+            ])->all(),
+        ];
     }
 }

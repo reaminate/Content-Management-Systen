@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Page;
 use App\Http\Requests\StorePageRequest;
 use App\Http\Requests\UpdatePageRequest;
+use Illuminate\Http\Request;
 
 class PageController extends Controller
 {
@@ -13,7 +14,9 @@ class PageController extends Controller
      */
     public function index()
     {
-        //
+        $pages = Page::all();
+
+        return response($pages->toResourceCollection());
     }
 
     /**
@@ -21,15 +24,22 @@ class PageController extends Controller
      */
     public function store(StorePageRequest $request)
     {
-        //
+        $validated = $request->validated();
+
+        $page = Page::create($validated);
+
+        return response(200);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Page $page)
+    public function show(Page $page, Request $request)
     {
-        //
+        if($request->has('images')){
+            $page->load('image');
+        }
+        return response($page->toResource());
     }
 
     /**

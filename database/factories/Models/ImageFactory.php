@@ -24,10 +24,13 @@ class ImageFactory extends Factory
         );
 
         return [
+            'original_filename' => basename($fixture),
             'stored_filename' => fake()->text(50),
+            'file_path' => $fixture,
+            'file_type' => fake()->randomElement(['image/jpeg', 'image/png', 'image/jpg']),
+            'filesize' => fake()->numberBetween(1000, 500000),
             'caption' => fake()->text(50),
             'upload_date' => fake()->date('Y-m-d', 'now'),
-            'file_path' => $fixture,
         ];
     }
 }
