@@ -19,6 +19,7 @@ return new class extends Migration
             $table->text('short_biography');
             $table->foreignId('profile_pic')->constrained('images', 'id')->cascadeOnDelete();
             $table->boolean('active')->default(false);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

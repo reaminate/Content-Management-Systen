@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CategoryResource;
+use App\Http\Resources\BlogResource;
 use App\Models\Category;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
@@ -12,11 +14,14 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::all()->toResourceCollection();
+        $categories = Category::query()
+        ->when($request->has('active_status'), function($query){
+            $query->where('active_status', '=', 1);
+        })->get();
 
-        return response($categories,200);
+        return response(CategoryResource::collection($categories),200);
     }
 
     /**
@@ -25,7 +30,7 @@ class CategoryController extends Controller
     public function store(StoreCategoryRequest $request)
     {
         $validated = $request->validated();
-        $category = Category::create($validated);
+        Category::create($validated);
         return response(200);
     }
 
@@ -37,7 +42,7 @@ class CategoryController extends Controller
         if ($request->has('blogs')){
             $category->load('blog');
         }
-        return response($category->toResource(),200);
+        return response(CategoryResource::make($category),200);
     }
 
     /**
@@ -45,7 +50,9 @@ class CategoryController extends Controller
      */
     public function update(UpdateCategoryRequest $request, Category $category)
     {
-        //
+        $validated = $request->validated();
+        $category->update($validated);
+        return response(200);
     }
 
     /**
@@ -53,6 +60,16 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        $category->delete();
+        return response(200);
+    }
+    //for public viewing of active categories
+    public function viewPublicActiveCategories(){
+        $catgegories = Category::where('active_status', '=', 1)->get();
+        return response(CategoryResource::collection($catgegories),200);
+    }
+    public function viewBlogsForCategory(Category $category){
+        $blogs = $category->blog()->paginate(5);
+        return response(BlogResource::collection($blogs),200);
     }
 }

@@ -22,6 +22,7 @@ return new class extends Migration
             $table->date('published_date')->nullable();
             $table->string('SEO_title');
             $table->string('SEO_description');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

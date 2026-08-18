@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\TagResource;
 use Illuminate\Http\Request;
 use App\Models\Tag;
 use App\Http\Requests\StoreTagRequest;
@@ -16,7 +17,7 @@ class TagController extends Controller
     {
         $tags = Tag::all();
 
-        return response()->json($tags);
+        return response(TagResource::collection($tags), 200);
     }
 
     /**
@@ -24,7 +25,10 @@ class TagController extends Controller
      */
     public function store(StoreTagRequest $request)
     {
-        //
+        $validated = $request->validated();
+        Tag::create($validated);
+
+        return response(200);
     }
 
     /**
@@ -35,7 +39,7 @@ class TagController extends Controller
         if($request->has('blogs')) {
             $tag->load('blogs');
         }
-        return response($tag->toResource());
+        return response(TagResource::make($tag),200);
     }
 
     /**
@@ -43,7 +47,10 @@ class TagController extends Controller
      */
     public function update(UpdateTagRequest $request, Tag $tag)
     {
-        //
+        $validated = $request->validated();
+        
+        $tag->update($validated);
+        return response(200);
     }
 
     /**
@@ -51,6 +58,7 @@ class TagController extends Controller
      */
     public function destroy(Tag $tag)
     {
-        //
+        $tag->delete();
+        return response(200);
     }
 }

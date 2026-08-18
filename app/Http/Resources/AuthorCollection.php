@@ -17,8 +17,8 @@ class AuthorCollection extends ResourceCollection
         return [
             'date'=>$this->collection->map(fn($author)=>[
                 'id' => $author->id,
-                'name'=>(string)$author->name,
-                'email' =>(string)$author->email,
+                'name'=>$author->name,
+                'email' =>$author->email,
                 'biography' => $author->short_biography,
                 'profile_pic' => ImageResource::make($author->whenLoaded('image')),
                 'blogs_written' => BlogCollection::make($author->whenLoaded('blogs')),

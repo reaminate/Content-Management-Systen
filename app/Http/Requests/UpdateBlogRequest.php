@@ -12,7 +12,7 @@ class UpdateBlogRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,7 +23,12 @@ class UpdateBlogRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title'=>[ 'string'],
+            'category_id'=>[ 'integer', 'exists:categories,id'],
+            'excerpt'=>[ 'string'],
+            'content'=>[ 'string'],
+            'image_id'=>['integer','exists:categories,id'],
+            'author_id'=>[ 'integer','exists:author,id'],
         ];
     }
 }

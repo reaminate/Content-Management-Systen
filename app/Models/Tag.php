@@ -7,11 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
+
 #[Hidden('slug')]
 class Tag extends Model
 {
     /** @use HasFactory<\Database\Factories\Models\TagFactory> */
     use HasFactory;
+
     protected $fillable = ['name'];
     public function blogs(): BelongsToMany
     {

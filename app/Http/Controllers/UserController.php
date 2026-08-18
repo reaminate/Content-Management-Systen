@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use App\Models\User;
+
 class UserController extends Controller
 {
     /**
@@ -11,40 +15,62 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all()->toResourceCollection();
+        $users = User::all();
 
-        return response($users, 200);
+        return response(UserResource::collection($users), 200);
     }
-
+    
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        //
+        $validated = $request->validated();
+        User::create($validated);
+
+        return response(200);
+
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(User $user)
     {
-        //
+        return response(UserResource::make($user),200);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateUserRequest $request, User $user)
     {
-        //
+        if (!$request->has('password')){
+            return response()->json([
+                'error'=> 'Password is required to update information'
+            ], 400);
+        }
+        $validated = $request->validated();
+        if($user->password != $validated['password']){
+            return response()->json([
+                'error'=> 'password mismatch'
+            ],400);
+        }
+        if($request->has('name')){
+            $user->name = $validated['name'];
+        }
+        if($request->has('email')){
+            $user->email = $validated['email'];
+        }
+        $user->active_status = $validated['active_status'];
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(User $user)
     {
-        //
+        $user->delete();
+        return response(200);
     }
 }

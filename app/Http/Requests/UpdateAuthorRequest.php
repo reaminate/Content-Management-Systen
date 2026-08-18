@@ -12,7 +12,7 @@ class UpdateAuthorRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,7 +23,10 @@ class UpdateAuthorRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ['string'],
+            'email' => [ 'email', 'unique:authors,email'],
+            'short_biography' => ['string'],
+            'profile_pic'=>[ 'integer', 'exists:images,id'],
         ];
     }
 }

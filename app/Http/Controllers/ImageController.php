@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ImageResource;
 use App\Models\Image;
 use App\Http\Requests\StoreImageRequest;
 use App\Http\Requests\UpdateImageRequest;
@@ -18,7 +19,7 @@ class ImageController extends Controller
         if($request->has('author')){
             $images->where('for_author', '=', null);
         }
-        return response($images->toResourceCollection());
+        return response(ImageResource::collection($images));
     }
 
     /**
@@ -26,7 +27,11 @@ class ImageController extends Controller
      */
     public function store(StoreImageRequest $request)
     {
-        //
+        $validated = $request->validated();
+
+        Image::create($validated);
+
+        return response(200);
     }
 
     /**
@@ -44,7 +49,7 @@ class ImageController extends Controller
             $image->load('pages');
         }
 
-        return response($image->toResource(), 200);
+        return response(ImageResource::make($image), 200);
     }
 
     /**
@@ -52,7 +57,9 @@ class ImageController extends Controller
      */
     public function update(UpdateImageRequest $request, Image $image)
     {
-        //
+        $validated = $request->validated();
+        $image->update($validated);
+        return response(200);
     }
 
     /**
@@ -60,6 +67,7 @@ class ImageController extends Controller
      */
     public function destroy(Image $image)
     {
-        //
+        $image->delete();
+        return response(200);
     }
 }

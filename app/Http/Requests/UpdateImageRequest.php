@@ -12,7 +12,7 @@ class UpdateImageRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,7 +23,10 @@ class UpdateImageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'stored_filename'=>[ 'unique:images,stored_filename', 'string'],
+            'file_path'=>['file', 'mimes:png,jpg,jpeg'],
+            'caption' => 'string',
+            'upload_date'=>['date']
         ];
     }
 }

@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('content');
             $table->foreignId('image_id')->constrained('images', 'id')->cascadeOnDelete();
             $table->foreignId('author_id')->constrained('authors', 'id')->cascadeOnDelete();
+            $table->enum('publication_status', ['draft', 'published', 'archived'])->default('draft');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

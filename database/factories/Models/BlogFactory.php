@@ -29,6 +29,7 @@ class BlogFactory extends Factory
             'content' => fake()->realTextBetween(20, 30),
             'image_id'=> $this->faker->randomElement(Image::where('for_author', false)->pluck('id')),
             'author_id' => $this->faker->randomElement(Author::pluck('id')),
+            'publication_status' => fake()->randomElement(['draft', 'published', 'archived']),
         ];
     }
 }

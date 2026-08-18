@@ -21,7 +21,7 @@ class PageFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => fake()->text(200),
+            'title' => fake()->sentence(3),
             'content'=> fake()->paragraph(3, true),
             'content_image' => $this->faker->randomElement(Image::where('for_author',false)->pluck('id')),
             'description' => fake()->text(100),

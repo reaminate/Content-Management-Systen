@@ -4,8 +4,8 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-
-class UpdateCategoryRequest extends FormRequest
+use Illuminate\Validation\Rules\Password;
+class UpdateUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,8 +23,10 @@ class UpdateCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' =>['string'],
-            'description' => ['string'],
+            'name' => ['string'],
+            'email'=> ['string','email', 'unique:users,email'],
+            'active_status' => 'boolean',
+            'password' => ['required', 'confirmed', Password::min(7)],
         ];
     }
 }

@@ -8,12 +8,14 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\SoftDeletes;
 #[Hidden('slug')]
 class Blog extends Model
 {
     /** @use HasFactory<\Database\Factories\Models\BlogFactory> */
     use HasFactory;
-    protected $fillable = ['title',  'excerpt', 'content', 'category_id', 'author_id', 'image_id'];
+    use SoftDeletes;
+    protected $fillable = ['title',  'excerpt', 'content', 'category_id', 'author_id', 'image_id', 'publication_status'];
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class, 'blog_tags')->using(Blog_tag::class);

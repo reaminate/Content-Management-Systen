@@ -6,16 +6,20 @@ use App\Models\Author;
 use App\Http\Requests\StoreAuthorRequest;
 use App\Http\Requests\UpdateAuthorRequest;
 use Illuminate\Http\Request;
+use App\Http\Resources\AuthorResource;
 class AuthorController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $authors = Author::all()->toResourceCollection();
+        $authors = Author::query()
+        ->when($request->has('active'), function($query){
+            $query->where('active', '=', 1);
+        })->get();
 
-        return response()->json($authors);
+        return response()->json(AuthorResource::collection($authors));
     }
 
     /**
@@ -41,7 +45,7 @@ class AuthorController extends Controller
         if($request->has('blogs')){
             $author->load('blogs');
         }
-        return response($author->toResource(), 200);
+        return response(AuthorResource::make($author), 200);
     }
 
     /**
@@ -49,7 +53,9 @@ class AuthorController extends Controller
      */
     public function update(UpdateAuthorRequest $request, Author $author)
     {
-        //
+        $validate = $request->validated();
+        $author->update($validate);
+        return response(200);
     }
 
     /**
@@ -57,6 +63,7 @@ class AuthorController extends Controller
      */
     public function destroy(Author $author)
     {
-        //
+        $author->delete();
+        return response()->json(200);
     }
 }

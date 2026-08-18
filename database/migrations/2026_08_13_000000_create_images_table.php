@@ -21,6 +21,7 @@ return new class extends Migration
             $table->boolean('for_author')->default(false);
             $table->string('caption');
             $table->date('upload_date');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
