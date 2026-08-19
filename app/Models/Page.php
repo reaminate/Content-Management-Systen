@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -20,9 +21,13 @@ class Page extends Model
     {
         return $this->belongsTo(Image::class, 'content_image');
     }
+    public function item(): HasOne
+    {
+        return $this->hasOne(Item::class);
+    }
     protected static function booted(): void
     {
-        static::creating(function($model){
+        static::saving(function($model){
             $model->slug = Str::slug($model->title);
         });
     }

@@ -23,12 +23,12 @@ class UpdatePageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title'=>['string', 'unique:pages,title'],
-            'content'=>['string'],
-            'content_image'=>['nullable', 'exists:images,id'],
-            'description'=>['string'],
-            'SEO_title'=>['string', 'unique:pages,SEO_title'],
-            'SEO_description'=>['string'],
+            'title'=>['string', 'unique:pages,title', 'sometimes'],
+            'content'=>['string', 'sometimes'],
+            'content_image'=>['nullable', 'exists:images,id', 'sometimes'],
+            'description'=>['string', 'sometimes'],
+            'SEO_title'=>['string', 'unique:pages,SEO_title', 'sometimes'],
+            'SEO_description'=>['string', 'sometimes'],
         ];
     }
 }

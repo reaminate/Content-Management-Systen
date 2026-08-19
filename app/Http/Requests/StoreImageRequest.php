@@ -12,7 +12,7 @@ class StoreImageRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,10 +23,10 @@ class StoreImageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'stored_filename'=>['required', 'unique:images,stored_filename', 'string'],
-            'file_path'=>['file', 'mimes:png,jpg,jpeg'],
-            'caption' => 'string',
-            'upload_date'=>['required', 'date']
+            'image' => ['required', 'file', 'image', 'mimes:jpeg,jpg,png', 'max:81912'],
+            'stored_filename' => ['string', 'required', 'unique:images,stored_filename'],
+            'caption' => ['nullable', 'string', 'max:255'],
+            'for_author' => ['sometimes', 'boolean'],
         ];
     }
 }

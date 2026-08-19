@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateBlogRequest extends FormRequest
+class StoreMenuRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,14 +23,9 @@ class UpdateBlogRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title'=>[ 'string'],
-            'category_id'=>[ 'integer', 'exists:categories,id'],
-            'excerpt'=>[ 'string'],
-            'content'=>[ 'string'],
-            'image_id'=>['integer','exists:categories,id'],
-            'author_id'=>[ 'integer','exists:author,id'],
-            'tags'=>['array'],
-            'tags.*'=>['integer', 'exists:tags,id'],
+            'name' => ['string', 'required', 'unique:menus,name'],
+            'description' => ['string', 'required'],
+            'active_status' => ['boolean', 'sometimes'],
         ];
     }
 }

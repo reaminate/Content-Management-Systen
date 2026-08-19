@@ -28,10 +28,8 @@ class Author extends Model
 
     protected static function booted(): void
     {
-        static::creating(function ($model) {
-            if (empty($model->slug)) {
-                $model->slug = Str::slug($model->name);
-            }
+        static::saving(function ($model) {
+            $model->slug = Str::slug($model->name);
         });
     }
 }

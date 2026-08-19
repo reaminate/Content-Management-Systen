@@ -17,7 +17,7 @@ class BlogController extends Controller
         $blog = Blog::query()
         ->when($request->has('publication_status'), function ($query) use ($request){
             $query->where('publication_status', '=', $request['publication_status']);
-        })->get();
+        })->cursorPaginate(15);
 
         return response(BlogResource::collection($blog),200);
     }
@@ -27,8 +27,13 @@ class BlogController extends Controller
      */
     public function store(StoreBlogRequest $request)
     {
-        $validated = $request->validated();
-        Blog::create($validated);
+        $validate = $request->validated();
+        $tags = $validate['tags'] ?? [];
+        unset($validate['tags']);
+
+        $blog = Blog::create($validate);
+        $blog->tags()->sync($tags);
+
         return response(200);
     }
 
@@ -40,13 +45,13 @@ class BlogController extends Controller
         if($request->has('tags')) {
             $blog->load('tags');
         }
-        if($request->has('author')) {
+        if($request->has('author_id')) {
             $blog->load('author');
         }
-        if($request->has('image')) {
+        if($request->has('image_id')) {
             $blog->load('image');
         }
-        if($request->has('category')) {
+        if($request->has('category_id')) {
             $blog->load('category');
         }
         return response(BlogResource::make($blog),200);
@@ -58,7 +63,11 @@ class BlogController extends Controller
     public function update(UpdateBlogRequest $request, Blog $blog)
     {
         $validate = $request->validated();
+        $tags = $validated['tags'] ?? [];
+        unset($validated['tags']);
+
         $blog->update($validate);
+        $blog->tags()->sync($tags);
         return response(200);
     }
 

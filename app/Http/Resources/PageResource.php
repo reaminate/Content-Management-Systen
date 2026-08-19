@@ -21,7 +21,8 @@ class PageResource extends JsonResource
             'description'=> $this->description,
             'publication_status' => $this->publication_status,
             'SEO_title' => $this->SEO_title,
-            'image'=> ImageResource::collection($this->whenLoaded('image')),
+            'image'=> ImageResource::make($this->whenLoaded('image')),
+            'item'=> ItemResource::make($this->whenLoaded('item')),
         ];
     }
 }

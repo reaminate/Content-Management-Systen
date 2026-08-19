@@ -27,8 +27,10 @@ class StoreBlogRequest extends FormRequest
             'category_id'=>['required', 'integer', 'exists:categories,id'],
             'excerpt'=>['required', 'string'],
             'content'=>['required', 'string'],
-            'image_id'=>['integer','exists:categories,id'],
-            'author_id'=>['required', 'integer','exists:author,id'],
+            'image_id'=>['integer','exists:categories,id', 'nullable'],
+            'author_id'=>['required', 'integer','exists:authors,id'],
+            'tags'=>['array'],
+            'tags.*'=>['integer', 'exists:tags,id'],
         ];
     }
 }

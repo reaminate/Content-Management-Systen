@@ -23,10 +23,10 @@ class UpdateImageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'stored_filename'=>[ 'unique:images,stored_filename', 'string'],
-            'file_path'=>['file', 'mimes:png,jpg,jpeg'],
-            'caption' => 'string',
-            'upload_date'=>['date']
+            'image' => ['sometimes', 'file', 'image', 'mimes:jpeg,jpg,png', 'max:2048'],
+            'stored_filename' => ['sometimes', 'string', 'unique:images,stored_filename'],
+            'caption' => ['sometimes', 'string', 'max:255'],
+            'for_author' => ['sometimes', 'boolean'],
         ];
     }
 }

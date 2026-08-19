@@ -22,7 +22,9 @@ class PageCollection extends ResourceCollection
                 'description'=> $page->description,
                 'publication_status' => $page->publication_status,
                 'SEO_title' => $page->SEO_title,
-                'image'=> ImageResource::collection($page->whenLoaded('image')),
+                'image'=> ImageResource::make($page->whenLoaded('image')),
+                'item'=> ItemResource::make($page->whenLoaded('item')),
+
             ])->all(),
         ];
     }

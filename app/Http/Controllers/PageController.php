@@ -18,7 +18,7 @@ class PageController extends Controller
         $pages = Page::query()
         ->when($request->has('publish_status'), function ($query) use ($request){
             $query->where('publication_status', '=', $request['publish_status']);
-        })->get();
+        })->cursorPaginate(15);
 
         return response(PageResource::collection($pages),200);
     }

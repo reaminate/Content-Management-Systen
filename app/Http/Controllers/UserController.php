@@ -6,6 +6,7 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 
 class UserController extends Controller
@@ -15,7 +16,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $users = User::simplePaginate(5);
 
         return response(UserResource::collection($users), 200);
     }
@@ -51,7 +52,8 @@ class UserController extends Controller
             ], 400);
         }
         $validated = $request->validated();
-        if($user->password != $validated['password']){
+        
+        if(!Hash::check($validated['password'], $user->password)){
             return response()->json([
                 'error'=> 'password mismatch'
             ],400);
@@ -62,6 +64,7 @@ class UserController extends Controller
         if($request->has('email')){
             $user->email = $validated['email'];
         }
+        $user->save();
         $user->active_status = $validated['active_status'];
     }
 

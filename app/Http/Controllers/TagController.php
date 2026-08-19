@@ -15,7 +15,7 @@ class TagController extends Controller
      */
     public function index()
     {
-        $tags = Tag::all();
+        $tags = Tag::cursorPaginate(15);
 
         return response(TagResource::collection($tags), 200);
     }

@@ -23,7 +23,7 @@ class UpdateTagRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['string', 'unique:tags,name']
+            'name' => ['string', 'unique:tags,name', 'sometimes']
         ];
     }
 }

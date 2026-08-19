@@ -23,10 +23,10 @@ class UpdateAuthorRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['string'],
-            'email' => [ 'email', 'unique:authors,email'],
-            'short_biography' => ['string'],
-            'profile_pic'=>[ 'integer', 'exists:images,id'],
+            'name' => ['string', 'sometimes'],
+            'email' => [ 'email', 'unique:authors,email', 'required'],
+            'short_biography' => ['string', 'sometimes'],
+            'profile_pic'=>[ 'integer', 'exists:images,id', 'sometimes'],
         ];
     }
 }

@@ -35,10 +35,13 @@ class Blog extends Model
 
     protected static function booted(): void
     {
-        static::creating(function ($model) {
-            if (empty($model->slug)) {
-                $model->slug = Str::slug($model->title);
-            }
+        static::saving(function ($model) {
+            $model->slug = Str::slug($model->title);
         });
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
     }
 }

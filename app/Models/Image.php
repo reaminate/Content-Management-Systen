@@ -8,13 +8,23 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class Image extends Model
 {
     /** @use HasFactory<\Database\Factories\Models\ImageFactory> */
     use HasFactory;
     use SoftDeletes;
-    protected $fillable = ['stored_filename', 'caption', 'file_path', 'upload_date'];
+    protected $fillable = [
+        'original_filename',
+        'stored_filename',
+        'file_path',
+        'file_type',
+        'filesize',
+        'for_author',
+        'caption',
+        'upload_date',
+    ];
 
     public function author(): HasOne
     {
@@ -31,10 +41,8 @@ class Image extends Model
 
     protected static function booted(): void
     {
-        static::creating(function ($model) {
-            $model->original_filename = basename($model->file_path);
-            $model->file_type = mime_content_type($model->file_path);
-            $model->filesize = filesize($model->file_path);
+        static::forceDeleted(function (Image $image) {
+            Storage::disk('public')->delete($image->file_path);
         });
     }
 }

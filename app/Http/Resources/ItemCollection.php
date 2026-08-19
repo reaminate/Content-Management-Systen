@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class BlogCollection extends ResourceCollection
+class ItemCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.
@@ -15,12 +15,11 @@ class BlogCollection extends ResourceCollection
     public function toArray(Request $request): array
     {
         return [
-            'data' => $this->collection->map(fn($blog)=>[
-                'id' => $blog->id,
-                'title' => $blog->title,
-                'excerpt' => $blog->excerpt,
-                'content' => $blog->content,
-                'tags' => TagCollection::make($blog->whenLoaded('tags')),
+            'data' => $this->collection->map(fn($item)=>[
+                'label' => $item->label,
+                'url' => $item->url,
+                'menu' => MenuResource::make($item->whenLoaded('menu')),
+                'page' => PageResource::make($item->whenLoaded('page')),
             ])->all(),
         ];
     }

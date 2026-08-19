@@ -19,7 +19,7 @@ class CategoryController extends Controller
         $categories = Category::query()
         ->when($request->has('active_status'), function($query){
             $query->where('active_status', '=', 1);
-        })->get();
+        })->cursorPaginate();
 
         return response(CategoryResource::collection($categories),200);
     }

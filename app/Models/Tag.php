@@ -22,7 +22,7 @@ class Tag extends Model
 
     protected static function booted():void
     {
-        static::creating(function ($model){
+        static::saving(function ($model){
             $model->slug = Str::slug($model->name);
         });
     }
