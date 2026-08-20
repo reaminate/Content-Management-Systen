@@ -22,4 +22,8 @@ class Menu extends Model
             $model->identifier = Str::slug($model->name);
         });
     }
+    public function getRouteKeyName():string
+    {
+        return 'identifier';
+    }
 }

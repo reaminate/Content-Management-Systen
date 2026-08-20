@@ -31,4 +31,8 @@ class Page extends Model
             $model->slug = Str::slug($model->title);
         });
     }
+    public function getRouteKeyName():string
+    {
+        return 'slug';
+    }
 }

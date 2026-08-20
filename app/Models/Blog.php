@@ -15,7 +15,7 @@ class Blog extends Model
     /** @use HasFactory<\Database\Factories\Models\BlogFactory> */
     use HasFactory;
     use SoftDeletes;
-    protected $fillable = ['title',  'excerpt', 'content', 'category_id', 'author_id', 'image_id', 'publication_status'];
+    protected $fillable = ['title',  'excerpt', 'content', 'category_id', 'author_id', 'image_id', 'publication_status', 'published_at'];
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class, 'blog_tags')->using(Blog_tag::class);

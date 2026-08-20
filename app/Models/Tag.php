@@ -26,4 +26,8 @@ class Tag extends Model
             $model->slug = Str::slug($model->name);
         });
     }
+    public function getRouteKeyName():string
+    {
+        return 'slug';
+    }
 }

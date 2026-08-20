@@ -27,4 +27,8 @@ class Item extends Model
             $model->url = Str::slug($model->label);
         });
     }
+    public function getRouteKeyName():string
+    {
+        return 'url';
+    }
 }

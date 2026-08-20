@@ -19,7 +19,14 @@ class ImageController extends Controller
         $images = Image::query()
         ->when($request->has('for_author'), function($query){
             $query->where('for_author', '=', true);
-        })->cursorPaginate(10);
+        })
+        ->when($request->has('original_filename'), function($query) use($request){
+            $query->where('original_filename', $request['original_filename']);
+        })
+        ->when($request->has('caption'), function($query) use($request){
+            $query->where('caption', $request['caption']);
+        })
+        ->cursorPaginate(10);
 
         
         

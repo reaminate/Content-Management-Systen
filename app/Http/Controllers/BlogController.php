@@ -17,7 +17,48 @@ class BlogController extends Controller
         $blog = Blog::query()
         ->when($request->has('publication_status'), function ($query) use ($request){
             $query->where('publication_status', '=', $request['publication_status']);
-        })->cursorPaginate(15);
+        })
+        ->when($request->has('category_id'), function ($query) use ($request){
+            $query->where('category_id', '=', $request['category_id']);
+        })
+        ->when($request->has('author_id'), function ($query) use ($request){
+            $query->where('author_id', '=', $request['author_id']);
+        })
+        
+        ->when($request->has('title'), function($query) use($request){
+            $query->where('title', $request['title']);
+        })
+        ->when($request->has('content'), function($query) use($request){
+            $query->where('content', $request['content']);
+        })
+        ->when($request->has('excerpt'), function($query) use($request){
+            $query->where('excerpt', $request['excerpt']);
+        })
+        ->when($request->has('tags'), function($query) use($request){
+            $query->whereHas('tags', function($q) use ($request){
+                $q->whereIn('tags.id', (array) $request['tags']);
+            });
+        })
+        ->when(($request->has('published_from')||$request->has('published_until')), function($query) use ($request){
+            $query->where('publication_status', '=' ,'published')
+            ->where('published_at', '>', $request['published_from']??null)
+            ->where('published_at', '<', $request['published_until']??null);
+        })
+        ->when($request->has('order'), function($query) use ($request){
+            $query->when(($request['order']=='new'), function($q){
+                $q->orderBy('published_at', 'asc');
+            });
+            $query->when(($request['order']=='old'), function($q){
+                $q->orderBy('published_at', 'desc');
+            });
+            $query->when(($request['order']=='A-Z'), function($q){
+                $q->orderBy('title', 'asc');
+            });
+            $query->when(($request['order']=='Z-A'), function($q){
+                $q->orderBy('title', 'asc');
+            });
+        })
+        ->cursorPaginate(15);
 
         return response(BlogResource::collection($blog),200);
     }
@@ -62,11 +103,18 @@ class BlogController extends Controller
      */
     public function update(UpdateBlogRequest $request, Blog $blog)
     {
-        $validate = $request->validated();
+        $validated = $request->validated();
         $tags = $validated['tags'] ?? [];
+        if((!($request['publication_status']=='published'))&& !$request->has('published_at')){
+            $validated['published_at'] = null;
+        }
         unset($validated['tags']);
-
-        $blog->update($validate);
+        if(($request->has('published_at'))){
+            $validated['published_at'] = $request['published_at']??now();
+            $validated['publication_status'] = 'published';
+        }
+        
+        $blog->update($validated);
         $blog->tags()->sync($tags);
         return response(200);
     }

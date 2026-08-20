@@ -22,14 +22,21 @@ class BlogFactory extends Factory
      */
     public function definition(): array
     {
+        $published_date = fake()->optional(0.8)->date('Y-m-d', 'now');
+        if(isset($published_date)){
+            $publication_status = 'published';
+        }else{
+            $publication_status = fake()->randomElement(['draft', 'archived']);
+        }
         return [
-            'title'=>fake()->sentence(20, true),
+            'title'=>fake()->unique()->sentence(20, true),
             'category_id'=>$this->faker->randomElement(Category::pluck('id')),
             'excerpt' => fake()->sentence(10, true),
             'content' => fake()->realTextBetween(20, 30),
             'image_id'=> $this->faker->randomElement(Image::where('for_author', false)->pluck('id')),
             'author_id' => $this->faker->randomElement(Author::pluck('id')),
-            'publication_status' => fake()->randomElement(['draft', 'published', 'archived']),
+            'published_at' => $published_date,
+            'publication_status' => $publication_status,
         ];
     }
 }

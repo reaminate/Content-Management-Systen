@@ -47,19 +47,9 @@ class ItemController extends Controller
      */
     public function update(UpdateItemRequest $request, Item $item)
     {
-        $validate = $request->validated();
-        if($request->has('label')){
-            $item->label = $validate['label'];
-        }if($request->has('order')){
-            $item->order = $validate['order'];
-        }
-        if($request->has('menu_id')){
-            $item->menu_id = $validate['menu_id'];
-        }
-        if($request->has('page_id')){
-            $item->page_id = $validate['page_id'];
-        }
-        $item->save();
+        $validated = $request->validated();
+        
+        $item->update($validated);
 
         return response(200);
 

@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\SoftDeletes;
+
+
 #[Hidden('slug')]
 class Author extends Model
 {
@@ -32,4 +34,5 @@ class Author extends Model
             $model->slug = Str::slug($model->name);
         });
     }
+
 }

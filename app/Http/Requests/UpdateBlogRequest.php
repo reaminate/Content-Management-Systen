@@ -23,14 +23,16 @@ class UpdateBlogRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title'=>[ 'string'],
-            'category_id'=>[ 'integer', 'exists:categories,id'],
-            'excerpt'=>[ 'string'],
-            'content'=>[ 'string'],
-            'image_id'=>['integer','exists:categories,id'],
-            'author_id'=>[ 'integer','exists:author,id'],
-            'tags'=>['array'],
-            'tags.*'=>['integer', 'exists:tags,id'],
+            'title'=>[ 'string','sometimes'],
+            'category_id'=>[ 'integer', 'exists:categories,id','sometimes'],
+            'excerpt'=>[ 'string','sometimes'],
+            'content'=>[ 'string','sometimes'],
+            'image_id'=>['integer','exists:categories,id','sometimes'],
+            'author_id'=>[ 'integer','exists:author,id','sometimes'],
+            'published_at' => ['date', 'sometimes','sometimes'],
+            'publication_status' => ['string', 'in:draft,published,archived'],
+            'tags'=>['array','sometimes'],
+            'tags.*'=>['integer', 'exists:tags,id','sometimes'],
         ];
     }
 }

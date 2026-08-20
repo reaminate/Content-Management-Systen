@@ -17,8 +17,26 @@ class PageController extends Controller
     {
         $pages = Page::query()
         ->when($request->has('publish_status'), function ($query) use ($request){
-            $query->where('publication_status', '=', $request['publish_status']);
-        })->cursorPaginate(15);
+            $query->where('publication_status', $request['publish_status']);
+        })
+        ->when($request->has('title'), function($query) use($request){
+            $query->where('title', $request['title']);
+        })
+        ->when($request->has('content'), function($query) use($request){
+            $query->where('content', $request['content']);
+        })
+        ->when($request->has('order'), function($query) use($request){
+            $query->when($request['order']=='title', function($q){
+                $q->orderBy('title', 'asc');
+            });
+            $query->when($request['order']=='title', function($q){
+                $q->orderBy('created_at', 'asc');
+            });
+            $query->when($request['order']=='title', function($q){
+                $q->orderBy('updated_At', 'asc');
+            });
+        })
+        ->cursorPaginate(15);
 
         return response(PageResource::collection($pages),200);
     }

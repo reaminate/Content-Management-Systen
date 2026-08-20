@@ -45,17 +45,8 @@ class MenuController extends Controller
      */
     public function update(UpdateMenuRequest $request, Menu $menu)
     {
-        $validate = $request->validated();
-        if($request->has('name')){
-            $menu->name = $validate['name'];
-        }
-        if($request->has('description')){
-            $menu->name = $validate['description'];
-        }
-        if($request->has('active_status')){
-            $menu->name = $validate['active_status'];
-        }
-        $menu->save();
+        $validated = $request->validated();
+        $menu->update($validated);
 
         return response(200);
         

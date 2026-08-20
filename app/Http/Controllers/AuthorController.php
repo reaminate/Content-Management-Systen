@@ -17,7 +17,11 @@ class AuthorController extends Controller
         $authors = Author::query()
         ->when($request->has('active'), function($query){
             $query->where('active', '=', 1);
-        })->cursorPaginate(5);
+        })
+        ->when($request->has('name'), function($query) use($request){
+            $query->where('name', $request['name']);
+        })
+        ->latest()->cursorPaginate(5);
 
         return response()->json(AuthorResource::collection($authors));
     }

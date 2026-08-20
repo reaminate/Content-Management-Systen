@@ -58,14 +58,14 @@ class UserController extends Controller
                 'error'=> 'password mismatch'
             ],400);
         }
-        if($request->has('name')){
-            $user->name = $validated['name'];
+        if($request->has('new_password')){
+            $new_passowrd = $validated['new_password'];
+            unset($validated['new_password']);
+            $validated['password'] = $new_passowrd;
         }
-        if($request->has('email')){
-            $user->email = $validated['email'];
-        }
-        $user->save();
-        $user->active_status = $validated['active_status'];
+        $user->update($validated);
+
+        return response(200);
     }
 
     /**

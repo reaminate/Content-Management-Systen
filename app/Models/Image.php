@@ -45,4 +45,8 @@ class Image extends Model
             Storage::disk('public')->delete($image->file_path);
         });
     }
+    public function getRouteKeyName():string
+    {
+        return 'stored_filename';
+    }
 }

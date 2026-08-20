@@ -4,8 +4,8 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Password;
-class UpdateUserRequest extends FormRequest
+
+class UpdateSettingRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,10 +24,15 @@ class UpdateUserRequest extends FormRequest
     {
         return [
             'name' => ['string', 'sometimes'],
-            'email'=> ['string','email', 'unique:users,email', 'sometimes'],
-            'active_status' => ['boolean', 'sometimes'],
-            'password' => ['required', 'confirmed'],
-            'new_password' => ['sometimes', Password::min(9)],
-        ];
+            'description' => ['string', 'sometimes'],
+            'email' => ['string', 'sometimes'],
+            'phone' => ['string', 'sometimes'],
+            'address' => ['string', 'sometimes'],
+            'facebook' => ['url', 'sometimes'],
+            'linkedin' => ['url', 'sometimes'],
+            'instagram' => ['url', 'sometimes'],
+            'SEO_title' => ['string', 'sometimes'],
+            'SEO_description' => ['string', 'sometimes'],
+        ]; 
     }
 }
