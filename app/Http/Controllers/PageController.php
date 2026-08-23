@@ -38,7 +38,7 @@ class PageController extends Controller
         })
         ->cursorPaginate(15);
 
-        return response(PageResource::collection($pages),200);
+        return PageResource::collection($pages);
     }
  
    
@@ -51,7 +51,7 @@ class PageController extends Controller
 
         Page::create($validated);
 
-        return response(200);
+        return response()->noContent(201);
     }
     /**
      * Display the specified resource.
@@ -61,7 +61,7 @@ class PageController extends Controller
         if($request->has('images')){
             $page->load('image');
         }
-        return response(PageResource::make($page),200);
+        return PageResource::make($page);
     }
 
     /**
@@ -71,7 +71,7 @@ class PageController extends Controller
     {
         $validate = $request->validated();
         $page->update($validate);
-        return response(200);
+        return response('',200);
     }
 
     /**
@@ -80,7 +80,7 @@ class PageController extends Controller
     public function destroy(Page $page)
     {
         $page->delete();
-        return response(200);
+        return response()->noContent();
     }
        //for public end point viewing, only shows published pages
     public function publicViewIndex(){

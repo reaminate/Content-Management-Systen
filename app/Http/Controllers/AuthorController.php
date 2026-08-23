@@ -23,7 +23,7 @@ class AuthorController extends Controller
         })
         ->latest()->cursorPaginate(5);
 
-        return response()->json(AuthorResource::collection($authors));
+        return AuthorResource::collection($authors);
     }
 
     /**
@@ -35,7 +35,7 @@ class AuthorController extends Controller
 
         Author::create($validated);
 
-        return response()->json(200);
+        return response()->json(null, 201);
     }
 
     /**
@@ -49,7 +49,7 @@ class AuthorController extends Controller
         if($request->has('blogs')){
             $author->load('blogs');
         }
-        return response(AuthorResource::make($author), 200);
+        return AuthorResource::make($author);
     }
 
     /**
@@ -59,7 +59,7 @@ class AuthorController extends Controller
     {
         $validate = $request->validated();
         $author->update($validate);
-        return response(200);
+        return response( '',200);
     }
 
     /**
@@ -68,6 +68,6 @@ class AuthorController extends Controller
     public function destroy(Author $author)
     {
         $author->delete();
-        return response()->json(200);
+        return response()->noContent();
     }
 }

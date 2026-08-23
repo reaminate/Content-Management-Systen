@@ -60,7 +60,7 @@ class BlogController extends Controller
         })
         ->cursorPaginate(15);
 
-        return response(BlogResource::collection($blog),200);
+        return BlogResource::collection($blog);
     }
 
     /**
@@ -75,7 +75,7 @@ class BlogController extends Controller
         $blog = Blog::create($validate);
         $blog->tags()->sync($tags);
 
-        return response(200);
+        return response()->noContent(201);
     }
 
     /**
@@ -95,7 +95,7 @@ class BlogController extends Controller
         if($request->has('category_id')) {
             $blog->load('category');
         }
-        return response(BlogResource::make($blog),200);
+        return BlogResource::make($blog);
     }
 
     /**
@@ -116,7 +116,7 @@ class BlogController extends Controller
         
         $blog->update($validated);
         $blog->tags()->sync($tags);
-        return response(200);
+        return response('',200);
     }
 
     /**
@@ -125,18 +125,18 @@ class BlogController extends Controller
     public function destroy(Blog $blog)
     {
         $blog->delete();
-        return response(200);
+        return response()->noContent();
     }
        //for public end point viewing, only shows published blogs
     public function publicViewIndex(){
         $blogs = Blog::where('publication_status', '=', 'published')->get();
-        return response(BlogResource::collection($blogs),200);
+        return BlogResource::collection($blogs);
     }
     //for public end point viewing a single blog by slug, only shows published blogs
-    public function viewBySlug(Blog $blogs){
-        if($blogs->publication_status !== 'published'){
+    public function viewBySlug(Blog $blog){
+        if($blog->publication_status !== 'published'){
             abort(404);
         }
-        return response(BlogResource::make($blogs),200);
+        return BlogResource::make($blog);
     }
 }

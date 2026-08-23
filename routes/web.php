@@ -7,7 +7,7 @@ use App\Http\Controllers\PageController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/page', [PageController::class, 'publicViewIndex']);
-Route::get('/menu', [MenuController::class, 'view']);
+Route::get('/menu/{menu:identifier}', [MenuController::class, 'view']);
 Route::get('/page/{page:slug}', [PageController::class, 'viewBySlug']);
 Route::get('/blog', [BlogController::class, 'publicViewIndex']);
 Route::get('/blog/{blog:slug}', [BlogController::class, 'viewBySlug']);

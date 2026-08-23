@@ -17,7 +17,7 @@ class RecoverController extends Controller
         if(!$request->hasAny('author', 'images', 'pages', 'blogs')){
             return response()->json([
                 'error' => 'invalid restore request',
-            ]);
+            ], 400);
         }
         if($request->has('author')){
             Author::withTrashed()->findOrFail($id)->restore();
@@ -41,7 +41,7 @@ class RecoverController extends Controller
         if(!$request->hasAny('author', 'images', 'pages', 'blogs')){
             return response()->json([
                 'error' => 'invalid force delete request',
-            ]);
+            ], 400);
         }
         if($request->has('author')){
             Author::withTrashed()->findOrFail($id)->forceDelete();

@@ -26,7 +26,7 @@ class MenuController extends Controller
         $validated = $request->validated();
         Menu::create($validated);
 
-        return response(200);
+        return response()->noContent(201);
     }
 
     /**
@@ -37,7 +37,7 @@ class MenuController extends Controller
         if($request->has('items')){
             $menu->load('items');
         }
-        return response(MenuResource::make($menu), 200);
+        return MenuResource::make($menu);
     }
 
     /**
@@ -48,7 +48,7 @@ class MenuController extends Controller
         $validated = $request->validated();
         $menu->update($validated);
 
-        return response(200);
+        return response('',200);
         
     }
 
@@ -58,6 +58,12 @@ class MenuController extends Controller
     public function destroy(Menu $menu)
     {
         $menu->delete();
-        return response(200);
+        return response()->noContent();
+    }
+    public function view(Menu $menu){
+        if($menu->active_status == false){
+            abort(404);
+        }
+        return MenuResource::make($menu);
     }
 }

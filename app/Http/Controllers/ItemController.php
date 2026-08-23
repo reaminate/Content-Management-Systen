@@ -15,7 +15,7 @@ class ItemController extends Controller
      */
     public function index()
     {
-        return (ItemResource::collection(Item::cursorPaginate(5)));
+        return ItemResource::collection(Item::cursorPaginate(5));
     }
 
     /**
@@ -25,7 +25,7 @@ class ItemController extends Controller
     {
         $validate = $request->validated();
         Item::create($validate);
-        return response(200);
+        return response()->noContent(201);
     }
 
     /**
@@ -39,7 +39,7 @@ class ItemController extends Controller
         if($request->has('page')){
             $item->load('page');
         } 
-        return response(ItemResource::make($item), 200);
+        return ItemResource::make($item);
     }
 
     /**
@@ -51,7 +51,7 @@ class ItemController extends Controller
         
         $item->update($validated);
 
-        return response(200);
+        return response('',200);
 
     }
 
@@ -62,6 +62,6 @@ class ItemController extends Controller
     {
         $item->delete();
 
-        return response(200);
+        return response()->noContent();
     }
 }

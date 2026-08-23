@@ -28,7 +28,7 @@ class StorePageRequest extends FormRequest
             'content_image'=>['nullable', 'exists:images,id'],
             'description'=>['string', 'required'],
             'SEO_title'=>['string', 'required', 'unique:pages,SEO_title'],
-            'SEO_description'=>['string','unique'],
+            'SEO_description'=>['string', 'required', 'unique:pages,SEO_description'],
         ];
     }
 }

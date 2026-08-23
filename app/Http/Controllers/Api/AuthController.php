@@ -32,7 +32,7 @@ class AuthController extends Controller
         }
         return response()->json([
             'message'=> 'email or password is required'
-        ]);
+        ], 422);
         
     }
 

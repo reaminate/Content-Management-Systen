@@ -17,7 +17,7 @@ class TagController extends Controller
     {
         $tags = Tag::cursorPaginate(15);
 
-        return response(TagResource::collection($tags), 200);
+        return TagResource::collection($tags);
     }
 
     /**
@@ -28,7 +28,7 @@ class TagController extends Controller
         $validated = $request->validated();
         Tag::create($validated);
 
-        return response(200);
+        return response()->noContent(201);
     }
 
     /**
@@ -39,7 +39,7 @@ class TagController extends Controller
         if($request->has('blogs')) {
             $tag->load('blogs');
         }
-        return response(TagResource::make($tag),200);
+        return TagResource::make($tag);
     }
 
     /**
@@ -50,7 +50,7 @@ class TagController extends Controller
         $validated = $request->validated();
         
         $tag->update($validated);
-        return response(200);
+        return response('',200);
     }
 
     /**
@@ -59,6 +59,6 @@ class TagController extends Controller
     public function destroy(Tag $tag)
     {
         $tag->delete();
-        return response(200);
+        return response()->noContent();
     }
 }

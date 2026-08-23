@@ -30,7 +30,7 @@ class ImageController extends Controller
 
         
         
-        return response(ImageResource::collection($images));
+        return ImageResource::collection($images);
     }
 
     /**
@@ -53,7 +53,7 @@ class ImageController extends Controller
             'upload_date' => now(),
         ]);
 
-        return response(200);
+        return response()->noContent(201);
     }
 
     /**
@@ -71,7 +71,7 @@ class ImageController extends Controller
             $image->load('pages');
         }
 
-        return response(ImageResource::make($image), 200);
+        return ImageResource::make($image);
     }
 
     /**
@@ -96,7 +96,7 @@ class ImageController extends Controller
         }
 
         $image->update($validated);
-        return response(200);
+        return response('',200);
     }
 
     /**
@@ -105,6 +105,6 @@ class ImageController extends Controller
     public function destroy(Image $image)
     {
         $image->delete();
-        return response(200);
+        return response()->noContent();
     }
 }

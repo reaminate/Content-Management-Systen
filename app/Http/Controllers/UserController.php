@@ -18,7 +18,7 @@ class UserController extends Controller
     {
         $users = User::simplePaginate(5);
 
-        return response(UserResource::collection($users), 200);
+        return UserResource::collection($users);
     }
     
     /**
@@ -29,7 +29,7 @@ class UserController extends Controller
         $validated = $request->validated();
         User::create($validated);
 
-        return response(200);
+        return response()->noContent(201);
 
     }
 
@@ -38,7 +38,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return response(UserResource::make($user),200);
+        return UserResource::make($user);
     }
 
     /**
@@ -65,7 +65,7 @@ class UserController extends Controller
         }
         $user->update($validated);
 
-        return response(200);
+        return response('',200);
     }
 
     /**
@@ -74,6 +74,6 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
-        return response(200);
+        return response()->noContent();
     }
 }

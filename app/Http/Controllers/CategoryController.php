@@ -21,7 +21,7 @@ class CategoryController extends Controller
             $query->where('active_status', '=', 1);
         })->cursorPaginate();
 
-        return response(CategoryResource::collection($categories),200);
+        return CategoryResource::collection($categories);
     }
 
     /**
@@ -31,7 +31,7 @@ class CategoryController extends Controller
     {
         $validated = $request->validated();
         Category::create($validated);
-        return response(200);
+        return response()->noContent(201);
     }
 
     /**
@@ -42,7 +42,7 @@ class CategoryController extends Controller
         if ($request->has('blogs')){
             $category->load('blog');
         }
-        return response(CategoryResource::make($category),200);
+        return CategoryResource::make($category);
     }
 
     /**
@@ -52,7 +52,7 @@ class CategoryController extends Controller
     {
         $validated = $request->validated();
         $category->update($validated);
-        return response(200);
+        return response('',200);
     }
 
     /**
@@ -61,12 +61,12 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         $category->delete();
-        return response(200);
+        return response()->noContent();
     }
     //for public viewing of active categories
     public function viewPublicActiveCategories(){
         $catgegories = Category::where('active_status', '=', 1)->get();
-        return response(CategoryResource::collection($catgegories),200);
+        return CategoryResource::collection($catgegories);
     }
     public function viewBlogsForCategory(Category $category){
         $blogs = $category->blog()->paginate(5);
