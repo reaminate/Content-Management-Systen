@@ -4,15 +4,15 @@ This project is a simple cms project desgined to help do the CRUD operations on 
 
 ## Managables
 
-# pages
-# blogs
-# categories
-# tags
-# authors
-# images
-# menus
-# items for the menu
-# settings
+pages
+blogs
+categories
+tags
+authors
+images
+menus
+items for the menu
+settings
 
 ## Public
 Below are the list of items that do not require authentication
