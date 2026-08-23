@@ -1,0 +1,656 @@
+{
+  "meta": {
+    "format": "httpie",
+    "version": "1.0.0",
+    "contentType": "collection",
+    "schema": "https://schema.httpie.io/1.0.0.json",
+    "docs": "https://httpie.io/r/help/export-from-httpie",
+    "source": "HTTPie Desktop 2025.2.0"
+  },
+  "entry": {
+    "name": "laravel cms project",
+    "icon": {
+      "name": "database",
+      "color": "green"
+    },
+    "auth": {
+      "type": "none"
+    },
+    "requests": [
+      {
+        "name": "",
+        "url": "http://127.0.0.1:8000/page/qui-autem-numquam",
+        "method": "GET",
+        "headers": [],
+        "queryParams": [],
+        "pathParams": [],
+        "auth": {
+          "type": "inherited"
+        },
+        "body": {
+          "type": "none",
+          "file": {
+            "name": ""
+          },
+          "text": {
+            "value": "",
+            "format": "application/json"
+          },
+          "form": {
+            "isMultipart": false,
+            "fields": []
+          },
+          "graphql": {
+            "query": "",
+            "variables": ""
+          }
+        }
+      },
+      {
+        "name": "",
+        "url": "http://127.0.0.1:8000/api/author",
+        "method": "GET",
+        "headers": [],
+        "queryParams": [
+          {
+            "name": "name",
+            "value": "amin",
+            "enabled": false
+          },
+          {
+            "name": "email",
+            "value": "amin@gmail.com",
+            "enabled": false
+          },
+          {
+            "name": "short_biography",
+            "value": "he lived",
+            "enabled": false
+          },
+          {
+            "name": "profile_pic",
+            "value": "3",
+            "enabled": false
+          },
+          {
+            "name": "blogs",
+            "value": "",
+            "enabled": false
+          },
+          {
+            "name": "profile_pic",
+            "value": "",
+            "enabled": false
+          }
+        ],
+        "pathParams": [],
+        "auth": {
+          "type": "bearer",
+          "credentials": {
+            "username": "",
+            "password": "CQh57QBOStPHT9rLXKPbKAVazcLm8qN1JSigJhzjecc41aa8"
+          },
+          "target": "headers"
+        },
+        "body": {
+          "type": "none",
+          "file": {
+            "name": ""
+          },
+          "text": {
+            "value": "",
+            "format": "application/json"
+          },
+          "form": {
+            "isMultipart": false,
+            "fields": []
+          },
+          "graphql": {
+            "query": "",
+            "variables": ""
+          }
+        }
+      },
+      {
+        "name": "",
+        "url": "http://127.0.0.1:8000/api/page",
+        "method": "GET",
+        "headers": [],
+        "queryParams": [
+          {
+            "name": "title",
+            "value": "Qui autem numquam.",
+            "enabled": false
+          }
+        ],
+        "pathParams": [],
+        "auth": {
+          "type": "bearer",
+          "credentials": {
+            "username": "",
+            "password": "k9jCsxGuq09vzELu23Eg9Hg9075V67cbigpTmgfc183b23b4"
+          },
+          "target": "headers"
+        },
+        "body": {
+          "type": "form",
+          "file": {
+            "name": ""
+          },
+          "text": {
+            "value": "",
+            "format": "application/json"
+          },
+          "form": {
+            "isMultipart": false,
+            "fields": [
+              {
+                "name": "title",
+                "value": "Id est nobis",
+                "enabled": false,
+                "type": "text"
+              }
+            ]
+          },
+          "graphql": {
+            "query": "",
+            "variables": ""
+          }
+        }
+      },
+      {
+        "name": "",
+        "url": "http://127.0.0.1:8000/api/blog",
+        "method": "GET",
+        "headers": [],
+        "queryParams": [
+          {
+            "name": "tags",
+            "value": "",
+            "enabled": false
+          },
+          {
+            "name": "author_id",
+            "value": "1",
+            "enabled": false
+          },
+          {
+            "name": "image_id",
+            "value": "2",
+            "enabled": false
+          },
+          {
+            "name": "category_id",
+            "value": "2",
+            "enabled": false
+          },
+          {
+            "name": "title",
+            "value": "great gatsby",
+            "enabled": false
+          },
+          {
+            "name": "excerpt",
+            "value": "the great gatsby",
+            "enabled": false
+          },
+          {
+            "name": "content",
+            "value": "why do you not know dis",
+            "enabled": false
+          }
+        ],
+        "pathParams": [],
+        "auth": {
+          "type": "bearer",
+          "credentials": {
+            "username": "",
+            "password": "CQh57QBOStPHT9rLXKPbKAVazcLm8qN1JSigJhzjecc41aa8"
+          },
+          "target": "headers"
+        },
+        "body": {
+          "type": "text",
+          "file": {
+            "name": ""
+          },
+          "text": {
+            "value": "",
+            "format": "application/json"
+          },
+          "form": {
+            "isMultipart": false,
+            "fields": []
+          },
+          "graphql": {
+            "query": "",
+            "variables": ""
+          }
+        }
+      },
+      {
+        "name": "",
+        "url": "http://127.0.0.1:8000/api/item/1",
+        "method": "POST",
+        "headers": [],
+        "queryParams": [
+          {
+            "name": "menu",
+            "value": "",
+            "enabled": true
+          },
+          {
+            "name": "page",
+            "value": "",
+            "enabled": true
+          }
+        ],
+        "pathParams": [],
+        "auth": {
+          "type": "inherited"
+        },
+        "body": {
+          "type": "none",
+          "file": {
+            "name": ""
+          },
+          "text": {
+            "value": "",
+            "format": "application/json"
+          },
+          "form": {
+            "isMultipart": false,
+            "fields": []
+          },
+          "graphql": {
+            "query": "",
+            "variables": ""
+          }
+        }
+      },
+      {
+        "name": "",
+        "url": "http://127.0.0.1:8000/api/menu/2",
+        "method": "GET",
+        "headers": [],
+        "queryParams": [
+          {
+            "name": "items",
+            "value": "",
+            "enabled": true
+          }
+        ],
+        "pathParams": [],
+        "auth": {
+          "type": "inherited"
+        },
+        "body": {
+          "type": "none",
+          "file": {
+            "name": ""
+          },
+          "text": {
+            "value": "",
+            "format": "application/json"
+          },
+          "form": {
+            "isMultipart": false,
+            "fields": []
+          },
+          "graphql": {
+            "query": "",
+            "variables": ""
+          }
+        }
+      },
+      {
+        "name": "",
+        "url": "http://127.0.0.1:8000/api/image/103",
+        "method": "GET",
+        "headers": [],
+        "queryParams": [
+          {
+            "name": "author",
+            "value": "",
+            "enabled": false
+          },
+          {
+            "name": "caption",
+            "value": "testing image upload",
+            "enabled": true
+          },
+          {
+            "name": "stored_filename",
+            "value": "testtest",
+            "enabled": true
+          }
+        ],
+        "pathParams": [],
+        "auth": {
+          "type": "bearer",
+          "credentials": {
+            "username": "",
+            "password": "tJUWa8ZCJdO39yiSHUdmkSxgqMEoKp8JRDtVKtgI75e27cee"
+          },
+          "target": "headers"
+        },
+        "body": {
+          "type": "form",
+          "file": {
+            "name": ""
+          },
+          "text": {
+            "value": "",
+            "format": "application/json"
+          },
+          "form": {
+            "isMultipart": true,
+            "fields": [
+              {
+                "name": "image",
+                "value": "",
+                "enabled": true,
+                "type": "file"
+              }
+            ]
+          },
+          "graphql": {
+            "query": "",
+            "variables": ""
+          }
+        }
+      },
+      {
+        "name": "",
+        "url": "http://127.0.0.1:8000/api/delete/101",
+        "method": "DELETE",
+        "headers": [],
+        "queryParams": [
+          {
+            "name": "blogs",
+            "value": "",
+            "enabled": false
+          },
+          {
+            "name": "images",
+            "value": "",
+            "enabled": true
+          }
+        ],
+        "pathParams": [],
+        "auth": {
+          "type": "bearer",
+          "credentials": {
+            "username": "",
+            "password": "tJUWa8ZCJdO39yiSHUdmkSxgqMEoKp8JRDtVKtgI75e27cee"
+          },
+          "target": "headers"
+        },
+        "body": {
+          "type": "none",
+          "file": {
+            "name": ""
+          },
+          "text": {
+            "value": "",
+            "format": "application/json"
+          },
+          "form": {
+            "isMultipart": false,
+            "fields": []
+          },
+          "graphql": {
+            "query": "",
+            "variables": ""
+          }
+        }
+      },
+      {
+        "name": "",
+        "url": "http://127.0.0.1:8000/api/tag",
+        "method": "GET",
+        "headers": [],
+        "queryParams": [
+          {
+            "name": "blogs",
+            "value": "",
+            "enabled": true
+          }
+        ],
+        "pathParams": [],
+        "auth": {
+          "type": "bearer",
+          "credentials": {
+            "username": "",
+            "password": "tJUWa8ZCJdO39yiSHUdmkSxgqMEoKp8JRDtVKtgI75e27cee"
+          },
+          "target": "headers"
+        },
+        "body": {
+          "type": "none",
+          "file": {
+            "name": ""
+          },
+          "text": {
+            "value": "",
+            "format": "application/json"
+          },
+          "form": {
+            "isMultipart": false,
+            "fields": []
+          },
+          "graphql": {
+            "query": "",
+            "variables": ""
+          }
+        }
+      },
+      {
+        "name": "",
+        "url": "http://127.0.0.1:8000/categories/2",
+        "method": "GET",
+        "headers": [],
+        "queryParams": [],
+        "pathParams": [],
+        "auth": {
+          "type": "inherited"
+        },
+        "body": {
+          "type": "none",
+          "file": {
+            "name": ""
+          },
+          "text": {
+            "value": "",
+            "format": "application/json"
+          },
+          "form": {
+            "isMultipart": false,
+            "fields": []
+          },
+          "graphql": {
+            "query": "",
+            "variables": ""
+          }
+        }
+      },
+      {
+        "name": "",
+        "url": "http://127.0.0.1:8000/api/login",
+        "method": "POST",
+        "headers": [],
+        "queryParams": [
+          {
+            "name": "email",
+            "value": "test2@gmail.com",
+            "enabled": true
+          },
+          {
+            "name": "password",
+            "value": "password",
+            "enabled": true
+          }
+        ],
+        "pathParams": [],
+        "auth": {
+          "type": "inherited"
+        },
+        "body": {
+          "type": "none",
+          "file": {
+            "name": ""
+          },
+          "text": {
+            "value": "",
+            "format": "application/json"
+          },
+          "form": {
+            "isMultipart": false,
+            "fields": []
+          },
+          "graphql": {
+            "query": "",
+            "variables": ""
+          }
+        }
+      },
+      {
+        "name": "",
+        "url": "http://127.0.0.1:8000/api/logged",
+        "method": "GET",
+        "headers": [],
+        "queryParams": [],
+        "pathParams": [],
+        "auth": {
+          "type": "bearer",
+          "credentials": {
+            "username": "",
+            "password": "hEa0AMOQi29wpcc87CRQrFxgiUdS4PcbGVUyvWSI41811696"
+          },
+          "target": "headers"
+        },
+        "body": {
+          "type": "none",
+          "file": {
+            "name": ""
+          },
+          "text": {
+            "value": "",
+            "format": "application/json"
+          },
+          "form": {
+            "isMultipart": false,
+            "fields": []
+          },
+          "graphql": {
+            "query": "",
+            "variables": ""
+          }
+        }
+      },
+      {
+        "name": "",
+        "url": "http://127.0.0.1:8000/api/user",
+        "method": "GET",
+        "headers": [],
+        "queryParams": [],
+        "pathParams": [],
+        "auth": {
+          "type": "bearer",
+          "credentials": {
+            "username": "",
+            "password": "SkfFFfapWedeqU2GsgreQ8kamkhlxTIIuQWG6pVm6a91e4ad"
+          },
+          "target": "headers"
+        },
+        "body": {
+          "type": "none",
+          "file": {
+            "name": ""
+          },
+          "text": {
+            "value": "",
+            "format": "application/json"
+          },
+          "form": {
+            "isMultipart": false,
+            "fields": []
+          },
+          "graphql": {
+            "query": "",
+            "variables": ""
+          }
+        }
+      },
+      {
+        "name": "",
+        "url": "http://127.0.0.1:8000/api/logout",
+        "method": "GET",
+        "headers": [],
+        "queryParams": [],
+        "pathParams": [],
+        "auth": {
+          "type": "bearer",
+          "credentials": {
+            "username": "",
+            "password": "SkfFFfapWedeqU2GsgreQ8kamkhlxTIIuQWG6pVm6a91e4ad"
+          },
+          "target": "headers"
+        },
+        "body": {
+          "type": "none",
+          "file": {
+            "name": ""
+          },
+          "text": {
+            "value": "",
+            "format": "application/json"
+          },
+          "form": {
+            "isMultipart": false,
+            "fields": []
+          },
+          "graphql": {
+            "query": "",
+            "variables": ""
+          }
+        }
+      },
+      {
+        "name": "",
+        "url": "http://127.0.0.1:8000/api/category/5",
+        "method": "GET",
+        "headers": [],
+        "queryParams": [
+          {
+            "name": "blogs",
+            "value": "",
+            "enabled": true
+          }
+        ],
+        "pathParams": [],
+        "auth": {
+          "type": "inherited"
+        },
+        "body": {
+          "type": "none",
+          "file": {
+            "name": ""
+          },
+          "text": {
+            "value": "",
+            "format": "application/json"
+          },
+          "form": {
+            "isMultipart": false,
+            "fields": []
+          },
+          "graphql": {
+            "query": "",
+            "variables": ""
+          }
+        }
+      }
+    ]
+  }
+}
