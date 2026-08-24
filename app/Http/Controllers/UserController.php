@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\MakeUserAdminRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
@@ -74,11 +75,22 @@ class UserController extends Controller
             unset($validated['new_password']);
             $validated['password'] = $new_passowrd;
         }
+        if($request->has('is_admin') && $request->user()->can('admin')){
+            $validated['is_admin'] = $request['is_admin'];
+        }
         $user->update($validated);
 
         return response('',200);
     }
+    public function makeUserAdmin(MakeUserAdminRequest $request, User $user){
+        if($request->user()->cannot('admin')){
+            abort(403);
+        }
+        $validated = $request->validated();
+        $user->update($validated);
 
+        return response('', 200);
+    }
     /**
      * Remove the specified resource from storage.
      */

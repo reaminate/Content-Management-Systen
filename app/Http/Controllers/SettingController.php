@@ -22,18 +22,13 @@ class SettingController extends Controller
      */
     public function update(UpdateSettingRequest $request, Setting $setting)
     {
+        if($request->user()->cannot('admin')){
+            abort(403);
+        }
         $validated = $request->validated();
 
         $setting->update($validated);
 
         return response(200);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Setting $setting)
-    {
-        //
     }
 }

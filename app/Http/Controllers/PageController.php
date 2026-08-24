@@ -47,6 +47,9 @@ class PageController extends Controller
      */
     public function store(StorePageRequest $request)
     {
+        if($request->user()->cannot('admin')){
+            abort(402);
+        }
         $validated = $request->validated();
 
         Page::create($validated);
@@ -69,6 +72,9 @@ class PageController extends Controller
      */
     public function update(UpdatePageRequest $request, Page $page)
     {
+        if($request->user()->cannot('admin')){
+            abort(402);
+        }
         $validate = $request->validated();
         $page->update($validate);
         return response('',200);
@@ -77,8 +83,11 @@ class PageController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Page $page)
+    public function destroy(Page $page, Request $request)
     {
+        if($request->user()->cannot('admin')){
+            abort(402);
+        }
         $page->delete();
         return response()->noContent();
     }
