@@ -14,8 +14,11 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        if($request->user()->cannot('admin')){
+            abort(403);
+        }
         $users = User::simplePaginate(5);
 
         return UserResource::collection($users);
@@ -33,14 +36,19 @@ class UserController extends Controller
 
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(User $user)
+    //show specific user
+    public function show(User $user, Request $request)
     {
+        if($request->user()->cannot('admin')){
+            abort(403);
+        }
         return UserResource::make($user);
     }
-
+    //shows the current logged in user
+    public function showSelf(Request $request)
+    {
+        return UserResource::make($request->user());
+    }
     /**
      * Update the specified resource in storage.
      */
@@ -50,6 +58,9 @@ class UserController extends Controller
             return response()->json([
                 'error'=> 'Password is required to update information'
             ], 400);
+        }
+        if($request->user()->cannot('updateDelete', $user)){
+            abort(403);
         }
         $validated = $request->validated();
         
@@ -71,8 +82,11 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy(User $user, Request $request)
     {
+        if($request->user()->cannot('updateDelete', $user)){
+            abort(403);
+        }
         $user->delete();
         return response()->noContent();
     }

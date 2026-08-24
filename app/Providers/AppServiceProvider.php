@@ -26,6 +26,6 @@ class AppServiceProvider extends ServiceProvider
             fn (string $modelName) => 'Database\\Factories\\Models\\'.class_basename($modelName).'Factory'
         );
 
-        Gate::define('recover', fn (User $user) => $user->isAdmin());
+        Gate::define('admin', fn (User $user) => $user->isAdmin());
     }
 }

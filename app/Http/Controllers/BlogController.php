@@ -103,7 +103,7 @@ class BlogController extends Controller
      */
     public function update(UpdateBlogRequest $request, Blog $blog)
     {
-        if($request->user()->cannot('update', $blog)){
+        if($request->user()->cannot('updateDelete', $blog)){
             abort(403);
         }
         $validated = $request->validated();
@@ -127,7 +127,7 @@ class BlogController extends Controller
      */
     public function destroy(Request $request, Blog $blog)
     {
-        if($request->user()->cannot('delete', $blog)){
+        if($request->user()->cannot('updateDelete', $blog)){
             abort(403);
         }
         $blog->delete();

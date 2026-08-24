@@ -32,6 +32,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('blog', BlogController::class);
     Route::apiResource('author', AuthorController::class);
     Route::apiResource('page', PageController::class);
+    Route::get('/user/self', [UserController::class, 'showSelf']);
     Route::apiResource('user', UserController::class);
     Route::apiResource('menu', MenuController::class);
     Route::apiResource('item', ItemController::class);

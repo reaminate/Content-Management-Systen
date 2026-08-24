@@ -14,7 +14,7 @@ class RecoverController extends Controller
 
     //restores soft deleted models
     public function restore(Request $request, int $id){
-        if($request->user()->cannot('recover')){
+        if($request->user()->cannot('admin')){
             abort(403);
         }
         if(!$request->hasAny('author', 'images', 'pages', 'blogs')){
@@ -41,7 +41,7 @@ class RecoverController extends Controller
 
     //fully destroys soft deleted models
     public function destroy(Request $request, int $id){
-        if($request->user()->cannot('recover')){
+        if($request->user()->cannot('admin')){
             abort(403);
         }
         if(!$request->hasAny('author', 'images', 'pages', 'blogs')){

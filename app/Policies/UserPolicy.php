@@ -2,11 +2,10 @@
 
 namespace App\Policies;
 
-use App\Models\Blog;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class BlogPolicy
+class UserPolicy
 {
     public function before(User $user, string $ability): bool|null
     {
@@ -16,11 +15,11 @@ class BlogPolicy
         return null;
     }
 
-    public function updateDelete(User $user, Blog $blog): Response
+    public function updateDelete(User $user, User $model): Response
     {
-        return $user->author?->id === $blog->author_id
-            ? Response::allow()
-            : Response::denyAsNotFound();
+        return $user->id === $model->id
+        ? Response::allow()
+        : Response::denyAsNotFound();
     }
 
 }
