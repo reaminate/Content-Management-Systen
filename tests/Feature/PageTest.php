@@ -16,8 +16,8 @@ class PageTest extends TestCase
     //creates a page to test
     public function test_page_can_be_created(): void
     {
-        Sanctum::actingAs(User::factory()->create());
-        $image = Image::factory()->create();
+        Sanctum::actingAs(User::factory(['is_admin'=>true])->create());
+        Image::factory()->create();
         $page = Page::factory()->make();
         $response = $this->postJson('/api/page', [
             'title' => $page->title,
@@ -62,7 +62,7 @@ class PageTest extends TestCase
     //updates the pages image
     public function test_page_update():void
     {
-        Sanctum::actingAs(User::factory()->create());
+        Sanctum::actingAs(User::factory(['is_admin'=>true])->create());
         $image1 = Image::factory()->create();
         $image2 = Image::factory()->create();
         $page = Page::factory([
@@ -77,7 +77,7 @@ class PageTest extends TestCase
     //creates and then deletes that page
     public function test_page_deletion():void
     {
-        Sanctum::actingAs(User::factory()->create());
+        Sanctum::actingAs(User::factory(['is_admin'=>true])->create());
         Image::factory()->create();
         $page = Page::factory()->create();
         $response = $this->deleteJson("api/page/{$page->slug}");

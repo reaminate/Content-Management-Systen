@@ -94,13 +94,13 @@ class PageController extends Controller
        //for public end point viewing, only shows published pages
     public function publicViewIndex(){
         $pages = Page::where('publication_status', '=', 'published')->get();
-        return response(PageResource::collection($pages),200);
+        return PageResource::collection($pages);
     }
     //for public end point viewing a single page by slug, only shows published pages
     public function viewBySlug(Page $page){
         if($page->publication_status !== 'published'){
             abort(404);
         }
-        return response(PageResource::make($page),200);
+        return PageResource::make($page);
     }
 }
