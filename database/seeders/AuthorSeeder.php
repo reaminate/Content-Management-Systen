@@ -12,6 +12,16 @@ class AuthorSeeder extends Seeder
      */
     public function run(): void
     {
-        Author::factory()->count(10)->create();
+        Author::factory()->create([
+            'name' => 'Amin',
+            'email' => 'amin@gmail.com',
+            'user_id' => 1,
+        ]);
+        Author::factory()->create([
+            'name' => 'zaa',
+            'email' => 'zaa@gmail.com',
+            'user_id' => 3,
+        ]);
+        Author::factory()->count(9)->create();
     }
 }

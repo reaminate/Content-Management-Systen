@@ -1880,3 +1880,9 @@ The project should go beyond simple CRUD by requiring relationships, many-to-man
 
 The finished application should represent a reasonably complete REST API that could serve as the backend of a small company website or news portal.
 
+
+
+
+### NEW
+--authors can edit and delete their own blogs
+--admin can delete all (will create a user with admin perms)

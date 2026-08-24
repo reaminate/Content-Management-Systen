@@ -17,7 +17,7 @@ class Author extends Model
     /** @use HasFactory<\Database\Factories\Models\AuthorFactory> */
     use HasFactory;
     use SoftDeletes;
-    protected $fillable = ['name', 'email', 'short_biography', 'profile_pic'];
+    protected $fillable = ['name', 'email', 'short_biography', 'profile_pic', 'user_id'];
 
     public function blogs(): HasMany
     {
@@ -26,6 +26,10 @@ class Author extends Model
     public function image(): BelongsTo
     {
         return $this->belongsTo(Image::class, 'profile_pic');
+    }
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     protected static function booted(): void

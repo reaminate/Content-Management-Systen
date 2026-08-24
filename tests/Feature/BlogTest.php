@@ -68,29 +68,57 @@ class BlogTest extends TestCase
             $createdBlog->tags->pluck('id')->toArray()
         );
     }
-    //updates the created blogs author
+    //updates the created blogs category (checks with differnt users)
     public function test_post_can_be_updated(): void
     {
-        Sanctum::actingAs(User::factory()->create());
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);  
         Image::factory()->create();
-        Author::factory()->create();
+        $author = Author::factory([
+            'user_id' => $user->id,
+        ])->create();
         Image::factory()->create();
         $category1 = Category::factory()->create();
         $category2 = Category::factory()->create();
         $blog = Blog::factory([
+            'author_id' => $author->id,
             'category_id' => $category1->id,
         ])->create();
         $response = $this->putJson("api/blog/{$blog->slug}", [
             'category_id' => $category2->id,
         ]);
         $response->assertStatus(200);
+
+        //trying to update the same blog but as a different author with different user
+        $user2 = User::factory()->create();
+        Image::factory()->create();
+        $author = Author::factory([
+            'user_id' => $user2->id,
+        ])->create();
+        Sanctum::actingAs($user2);
+        $response = $this->putJson("api/blog/{$blog->slug}", [
+            'category_id' => $category1->id,
+        ]);
+        $response->assertStatus(403);
+
+        //trying to update that same blog but as differnet user 
+        $user3 = User::factory()->create();
+        Image::factory()->create();
+        Sanctum::actingAs($user3);
+        $response = $this->putJson("api/blog/{$blog->slug}", [
+            'category_id' => $category2->id,
+        ]);
+        $response->assertStatus(403);
     }
     //changes the tag relationships of the blog
     public function test_changing_the_tags_of_a_blog(): void
     {
-        Sanctum::actingAs(User::factory()->create());
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
         Image::factory()->create();
-        Author::factory()->create();
+        Author::factory([
+            'user_id' => $user->id,
+        ])->create();
         Image::factory()->create();
         Category::factory()->create();
         $tags = Tag::factory()->count(7)->create();
@@ -112,16 +140,36 @@ class BlogTest extends TestCase
             $blog->tags->pluck('id')->toArray()
         );
     }
-    //deletes an existing blog
+    //deletes an existing blog (takes into account if you made the blog or not)
     public function test_post_deletion(): void
     {
-        Sanctum::actingAs(User::factory()->create());
+        $user1 = User::factory()->create();
+        Image::factory()->create();
+        $author1 = Author::factory([
+            'user_id' => $user1->id,
+        ])->create();
+        $user2 = User::factory()->create();
+        Image::factory()->create();
+        $author2 = Author::factory([
+            'user_id' => $user2->id,
+        ])->create();
+
         Image::factory()->create();
         Author::factory()->create();
         Image::factory()->create();
         Category::factory()->create();
         Tag::factory()->count(7)->create();
-        $blog = Blog::factory()->create();
+        $blog = Blog::factory([
+            'author_id' => $author1->id,
+        ])->create();
+
+        //should fail as your logged in as not the author who made the blog
+        Sanctum::actingAs($user2);
+        $response = $this->deleteJson("api/blog/{$blog->slug}");
+        $response->assertStatus(403);
+
+        //should work as you made the blog
+        Sanctum::actingAs($user1);
         $response = $this->deleteJson("api/blog/{$blog->slug}");
         $response->assertStatus(204);
     }
@@ -178,5 +226,62 @@ class BlogTest extends TestCase
             $status
         );
         
+    }
+
+    public function test_whether_an_admin_can_delete_any_blog():void
+    {
+        $user_admin = User::factory([
+            'is_admin' => true,
+        ])->create();
+        $user = User::factory()->create();
+        Image::factory()->create();
+        Author::factory([
+            'user_id' => null, 
+        ])->create();
+        Image::factory()->create();
+        Category::factory()->create();
+        Tag::factory()->count(7)->create();
+        $blog = Blog::factory()->create();
+
+        //should fail as you are not a logged in author
+        Sanctum::actingAs($user); //need to be logged to view anything
+        $response = $this->deleteJson("api/blog/{$blog->slug}");
+        $response->assertStatus(403);
+
+        //should pass as you are the admin
+        Sanctum::actingAs($user_admin); 
+        $response = $this->deleteJson("api/blog/{$blog->slug}");
+        $response->assertStatus(204);
+    }
+
+    //deletes a soft deleted model (blog)
+    public function test_whether_only_admin_can_fully_delete_a_model():void
+    {
+        $user_admin = User::factory([
+            'is_admin' => true,
+        ])->create();
+        $user = User::factory()->create();
+        Image::factory()->create();
+        Author::factory([
+            'user_id' => $user->id, 
+        ])->create();
+        Image::factory()->create();
+        Category::factory()->create();
+        Tag::factory()->count(7)->create();
+        $blog = Blog::factory()->create();
+        //soft delete the blog
+        Sanctum::actingAs($user);
+        $response = $this->deleteJson("api/blog/{$blog->slug}");
+        $response->assertStatus(204);
+
+        //trying to fully delete as non admin
+        $response = $this->deleteJson("api/delete/1", ['blogs'=> true]);
+        $response->assertStatus(403);
+
+        //trying to fully delete as an admin
+        Sanctum::actingAs($user_admin);
+        $response = $this->deleteJson("api/delete/1", ['blogs'=> true]);
+        $response->assertStatus(204);
+
     }
 }

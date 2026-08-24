@@ -4,6 +4,7 @@ namespace Database\Factories\Models;
 
 use App\Models\Author;
 use App\Models\Image;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -23,6 +24,7 @@ class AuthorFactory extends Factory
         return [
             'name' => fake()->name(),
             'email'=> fake()->unique()->safeEmail(),
+            'user_id' =>null,
             'short_biography' => fake()->realTextBetween(100, 500),
             'profile_pic'=> $this->faker->randomElement(Image::where('for_author', false)->pluck('id')),
             'active' => fake()->boolean(70)

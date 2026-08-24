@@ -103,6 +103,9 @@ class BlogController extends Controller
      */
     public function update(UpdateBlogRequest $request, Blog $blog)
     {
+        if($request->user()->cannot('update', $blog)){
+            abort(403);
+        }
         $validated = $request->validated();
         $tags = $validated['tags'] ?? [];
         if((!($request['publication_status']=='published'))&& !$request->has('published_at')){
@@ -122,8 +125,11 @@ class BlogController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Blog $blog)
+    public function destroy(Request $request, Blog $blog)
     {
+        if($request->user()->cannot('delete', $blog)){
+            abort(403);
+        }
         $blog->delete();
         return response()->noContent();
     }

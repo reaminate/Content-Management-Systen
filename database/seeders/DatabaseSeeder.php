@@ -12,25 +12,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory()->create([
-            'name' => 'test',
-            'email'=> 'test@gmail.com',
-            'password'=> bcrypt('password'),
-        ]);
-        User::factory()->create([
-            'name'=> 'test2',
-            'email'=> 'test2@gmail.com',
-            'password'=> bcrypt('password'),
-        ]);
         $this->call([
             ImageSeeder::class,
             CategorySeeder::class,
+            UserSeeder::class,
             AuthorSeeder::class,     
             TagSeeder::class,
             BlogSeeder::class,
             Blog_tagSeeder::class,
             PageSeeder::class,
-            UserSeeder::class,
             MenuSeeder::class,
             ItemSeeder::class,
             SettingSeeder::class,
