@@ -14,10 +14,18 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\RecoverController;
 use App\Http\Controllers\Api\AuthController;
 
-
+//public api endpoint
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [UserController::class, 'store']);
+Route::get('/page', [PageController::class, 'publicViewIndex']);
+Route::get('/menu/{menu:identifier}', [MenuController::class, 'view']);
+Route::get('/page/{page:slug}', [PageController::class, 'viewBySlug']);
+Route::get('/blog', [BlogController::class, 'publicViewIndex']);
+Route::get('/blog/{blog:slug}', [BlogController::class, 'viewBySlug']);
+Route::get('/categories', [CategoryController::class,'viewPublicActiveCategories']);
+Route::get('/categories/{category}', [CategoryController::class,'viewBlogsForCategory']);
 
+//protected end point
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class,'logout']);
     Route::get('/logged', [AuthController::class, 'loggedInUsers']);
