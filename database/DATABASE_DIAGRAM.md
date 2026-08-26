@@ -3,19 +3,7 @@
 Entity-relationship diagram generated from the migrations in `database/migrations/`.
 Laravel/package infrastructure tables (`sessions`, `password_reset_tokens`, `cache`, `cache_locks`, `jobs`, `job_batches`, `failed_jobs`, `personal_access_tokens`) are omitted since they don't participate in the application's domain relationships.
 
-```mermaid
-erDiagram
-    CATEGORIES ||--o{ BLOGS : "has many"
-    IMAGES ||--o{ BLOGS : "illustrates"
-    IMAGES ||--o{ AUTHORS : "profile picture"
-    IMAGES ||--o{ PAGES : "content image"
-    AUTHORS ||--o{ BLOGS : "writes"
-    USERS |o--o{ AUTHORS : "linked account"
-    BLOGS ||--o{ BLOG_TAGS : "has many"
-    TAGS ||--o{ BLOG_TAGS : "has many"
-    MENUS ||--o{ ITEMS : "has many"
-    PAGES ||--o{ ITEMS : "linked by"
-
+## Tables
     USERS {
         bigint id PK
         string name
@@ -139,7 +127,7 @@ erDiagram
         string SEO_description
         timestamps timestamps
     }
-```
+
 
 ## Relationships
 

@@ -16,13 +16,13 @@ class BlogController extends Controller
     {
         $blog = Blog::query()
         ->when($request->has('publication_status'), function ($query) use ($request){
-            $query->where('publication_status', '=', $request['publication_status']);
+            $query->where('publication_status',$request['publication_status']);
         })
         ->when($request->has('category_id'), function ($query) use ($request){
-            $query->where('category_id', '=', $request['category_id']);
+            $query->where('category_id', $request['category_id']);
         })
         ->when($request->has('author_id'), function ($query) use ($request){
-            $query->where('author_id', '=', $request['author_id']);
+            $query->where('author_id', $request['author_id']);
         })
         
         ->when($request->has('title'), function($query) use($request){
@@ -40,9 +40,9 @@ class BlogController extends Controller
             });
         })
         ->when(($request->has('published_from')||$request->has('published_until')), function($query) use ($request){
-            $query->where('publication_status', '=' ,'published')
-            ->where('published_at', '>', $request['published_from']??null)
-            ->where('published_at', '<', $request['published_until']??null);
+            $query->where('publication_status' ,'published')
+            ->where('published_at', '>', $request['published_from']??'0-0-0')
+            ->where('published_at', '<', $request['published_until']??'200000-12-30');
         })
         ->when($request->has('order'), function($query) use ($request){
             $query->when(($request['order']=='new'), function($q){
