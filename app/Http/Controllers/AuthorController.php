@@ -16,7 +16,7 @@ class AuthorController extends Controller
     {
         $authors = Author::query()
         ->when($request->has('active'), function($query){
-            $query->where('active', '=', 1);
+            $query->where('active', 1);
         })
         ->when($request->has('name'), function($query) use($request){
             $query->where('name', $request['name']);
