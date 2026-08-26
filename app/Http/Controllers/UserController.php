@@ -31,6 +31,9 @@ class UserController extends Controller
     public function store(StoreUserRequest $request)
     {
         $validated = $request->validated();
+        if($request->has('is_admin')){
+            $validated['is_admin'] = false;
+        }
         User::create($validated);
 
         return response()->noContent(201);

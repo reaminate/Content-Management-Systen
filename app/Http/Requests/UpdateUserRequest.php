@@ -27,6 +27,7 @@ class UpdateUserRequest extends FormRequest
             'email'=> ['string','email', 'unique:users,email', 'sometimes'],
             'active_status' => ['boolean', 'sometimes'],
             'password' => ['required', 'confirmed'],
+            'is_admin' => ['sometimes', 'boolean'],
             'new_password' => ['sometimes', Password::min(9)],
         ];
     }

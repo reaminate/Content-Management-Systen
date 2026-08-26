@@ -76,6 +76,13 @@ class PageController extends Controller
             abort(402);
         }
         $validate = $request->validated();
+        if((($validate['publication_status']=='draft'))&& !$request->has('publication_date')){
+            $validate['publication_date'] = null;
+        }
+        if(($request->has('publication_date')||$validate['publication_status']=='published') && ($validate['publication_status'] ?? null) !== 'draft'){
+            $validate['publication_date'] = $request['publication_date']??now();
+            $validate['publication_status'] = 'published';
+        }
         $page->update($validate);
         return response('',200);
     }

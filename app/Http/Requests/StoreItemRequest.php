@@ -22,11 +22,9 @@ class StoreItemRequest extends FormRequest
      */
     public function rules(): array
     {
-        $item = $this->route('item');
-        $menuId = $this->input('menu_id', $item->menu_id);
+        $menuId = $this->input('menu_id');
 
-        $siblings = Item::where('menu_id', $menuId)->where('id', '!=', $item->id);
-        $max = (clone $siblings)->max('order') ?? 0;
+        $max = Item::where('menu_id', $menuId)->max('order') ?? 0;
         return [
             'label' => ['string', 'unique:items,label', 'required'],
             'order' => ['integer', "gt:$max", 'required'],

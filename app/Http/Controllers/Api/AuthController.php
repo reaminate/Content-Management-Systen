@@ -13,26 +13,26 @@ use Illuminate\Http\Request;
 class AuthController extends Controller
 {
     public function login(AuthUserRequest $request){
-        if($request->validated()){
-            $user = User::where("email", $request->email)->first();
-            if(!$user || !Hash::check($request->password, $user->password)){
-                throw ValidationException::withMessages([
-                    'error' => 'incorrect email or password'
-                ]);
-            }
-
-            $token = $user->createToken('auth_token')->plainTextToken;
-
+        if(!$request->validated()){
             return response()->json([
-                'message' => 'login successful',
-                'user' => UserResource::make($user),
-                'access_token' => $token,
-                'token_type' => 'bearer',
-            ], 200);
+                'message'=> 'email or password is required'
+            ], 422);
+        }      
+        $user = User::where("email", $request->email)->first();
+        if(!$user || !Hash::check($request->password, $user->password)){
+            throw ValidationException::withMessages([
+                'error' => 'incorrect email or password'
+            ]);
         }
+
+        $token = $user->createToken('auth_token')->plainTextToken;
+
         return response()->json([
-            'message'=> 'email or password is required'
-        ], 422);
+            'message' => 'login successful',
+            'user' => UserResource::make($user),
+            'access_token' => $token,
+            'token_type' => 'bearer',
+        ], 200);
         
     }
 
@@ -44,7 +44,10 @@ class AuthController extends Controller
 
     }
 
-    public function loggedInUsers(){
+    public function loggedInUsers(Request $request){
+        if($request->user()->cannot('admin')){
+            abort(403);
+        }
         $users = User::whereHas('tokens', function($query){
             $query->whereNull('expires_at')->orWhere('expires_at', '>', now());
         })->get();

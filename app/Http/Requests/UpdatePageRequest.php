@@ -27,6 +27,8 @@ class UpdatePageRequest extends FormRequest
             'content'=>['string', 'sometimes'],
             'content_image'=>['nullable', 'exists:images,id', 'sometimes'],
             'description'=>['string', 'sometimes'],
+            'publication_status' => ['string', 'in:draft,published,archived', 'sometimes'],
+            'publication_date' => ['date', 'sometimes'],
             'SEO_title'=>['string', 'unique:pages,SEO_title', 'sometimes'],
             'SEO_description'=>['string', 'sometimes'],
         ];

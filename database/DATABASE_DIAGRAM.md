@@ -10,6 +10,7 @@ erDiagram
     IMAGES ||--o{ AUTHORS : "profile picture"
     IMAGES ||--o{ PAGES : "content image"
     AUTHORS ||--o{ BLOGS : "writes"
+    USERS |o--o{ AUTHORS : "linked account"
     BLOGS ||--o{ BLOG_TAGS : "has many"
     TAGS ||--o{ BLOG_TAGS : "has many"
     MENUS ||--o{ ITEMS : "has many"
@@ -20,6 +21,7 @@ erDiagram
         string name
         string email UK
         boolean active_status
+        boolean is_admin
         timestamp email_verified_at
         string password
         string remember_token
@@ -63,6 +65,7 @@ erDiagram
         string slug
         text short_biography
         bigint profile_pic FK
+        bigint user_id FK "nullable"
         boolean active
         timestamp deleted_at "soft delete"
         timestamps timestamps
@@ -145,6 +148,7 @@ erDiagram
 | `blogs.category_id` | `categories.id` | many-to-one | `category_id` | cascade |
 | `blogs.image_id` | `images.id` | many-to-one | `image_id` | cascade |
 | `authors.profile_pic` | `images.id` | many-to-one | `profile_pic` | cascade |
+| `authors.user_id` | `users.id` | many-to-one (nullable) | `user_id` | set null |
 | `pages.content_image` | `images.id` | many-to-one | `content_image` | cascade |
 | `blogs.author_id` | `authors.id` | many-to-one | `author_id` | cascade |
 | `blog_tags.blog_id` | `blogs.id` | many-to-one | `blog_id` | cascade |

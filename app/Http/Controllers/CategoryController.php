@@ -29,6 +29,7 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
+
         $validated = $request->validated();
         Category::create($validated);
         return response()->noContent(201);
@@ -50,6 +51,7 @@ class CategoryController extends Controller
      */
     public function update(UpdateCategoryRequest $request, Category $category)
     {
+        
         $validated = $request->validated();
         $category->update($validated);
         return response('',200);
@@ -58,8 +60,11 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Category $category)
+    public function destroy(Category $category, Request $request)
     {
+        if($request->user()->cannot('admin')){
+            abort(403);
+        }
         $category->delete();
         return response()->noContent();
     }
@@ -70,6 +75,7 @@ class CategoryController extends Controller
     }
     public function viewBlogsForCategory(Category $category){
         $blogs = $category->blog()->paginate(5);
+        $blogs->where('publication_status', 'published');
         return response(BlogResource::collection($blogs),200);
     }
 }

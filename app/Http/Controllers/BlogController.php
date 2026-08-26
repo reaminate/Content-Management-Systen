@@ -108,12 +108,12 @@ class BlogController extends Controller
         }
         $validated = $request->validated();
         $tags = $validated['tags'] ?? [];
-        if((!($request['publication_status']=='published'))&& !$request->has('published_at')){
+        if((!($validated['publication_status']=='published'))&& !$request->has('published_at')){
             $validated['published_at'] = null;
         }
         unset($validated['tags']);
-        if(($request->has('published_at'))){
-            $validated['published_at'] = $request['published_at']??now();
+        if(($request->has('published_at')) && ($validated['publication_status'] ?? null) !== 'draft'){
+            $validated['published_at'] = $validated['published_at']??now();
             $validated['publication_status'] = 'published';
         }
         

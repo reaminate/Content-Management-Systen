@@ -16,7 +16,7 @@ use App\Http\Controllers\Api\AuthController;
 
 
 Route::post('/login', [AuthController::class, 'login']);
-
+Route::post('/register', [UserController::class, 'store']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class,'logout']);
@@ -34,7 +34,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('page', PageController::class);
     Route::get('/user/self', [UserController::class, 'showSelf']);
     Route::put('/user/{user}/admin', [UserController::class, 'makeUserAdmin']);
-    Route::apiResource('user', UserController::class);
+    Route::apiResource('user', UserController::class)->except(['store']);
     Route::apiResource('menu', MenuController::class);
     Route::apiResource('item', ItemController::class);
     Route::apiResource('setting', SettingController::class);
