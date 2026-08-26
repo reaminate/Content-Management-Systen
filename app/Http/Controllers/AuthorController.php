@@ -33,7 +33,8 @@ class AuthorController extends Controller
     {
         $validated = $request->validated();
 
-        Author::create($validated);
+        $author = Author::create($validated);
+        $author->image()->update(['for_author'=>true]);
 
         return response()->json(null, 201);
     }
@@ -58,6 +59,12 @@ class AuthorController extends Controller
     public function update(UpdateAuthorRequest $request, Author $author)
     {
         $validate = $request->validated();
+        if($request->has('profile_pic')){
+            $author->image()->update(['for_author'=>false]);
+            $author->update($validate);
+            $author->image()->update(['for_author'=>true]);
+            return response('', 200);
+        }
         $author->update($validate);
         return response( '',200);
     }

@@ -24,7 +24,7 @@ class UpdateAuthorRequest extends FormRequest
     {
         return [
             'name' => ['string', 'sometimes'],
-            'email' => [ 'email', 'unique:authors,email', 'required'],
+            'email' => [ 'email', 'unique:authors,email', 'sometimes'],
             'short_biography' => ['string', 'sometimes'],
             'profile_pic'=>[ 'integer', 'exists:images,id', 'sometimes'],
         ];
