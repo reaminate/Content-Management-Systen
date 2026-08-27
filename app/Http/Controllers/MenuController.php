@@ -23,6 +23,9 @@ class MenuController extends Controller
      */
     public function store(StoreMenuRequest $request)
     {
+        if($request->user()->cannot('admin')){
+            abort(403);
+        }
         $validated = $request->validated();
         Menu::create($validated);
 
@@ -45,6 +48,9 @@ class MenuController extends Controller
      */
     public function update(UpdateMenuRequest $request, Menu $menu)
     {
+        if($request->user()->cannot('admin')){
+            abort(403);
+        }
         $validated = $request->validated();
         $menu->update($validated);
 
@@ -55,8 +61,11 @@ class MenuController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Menu $menu)
+    public function destroy(Menu $menu, Request $request)
     {
+        if($request->user()->cannot('admin')){
+            abort(403);
+        }
         $menu->delete();
         return response()->noContent();
     }

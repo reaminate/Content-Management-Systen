@@ -25,15 +25,6 @@ class BlogController extends Controller
             $query->where('author_id', $request['author_id']);
         })
         
-        ->when($request->has('title'), function($query) use($request){
-            $query->where('title', $request['title']);
-        })
-        ->when($request->has('content'), function($query) use($request){
-            $query->where('content', $request['content']);
-        })
-        ->when($request->has('excerpt'), function($query) use($request){
-            $query->where('excerpt', $request['excerpt']);
-        })
         ->when($request->has('tags'), function($query) use($request){
             $query->whereHas('tags', function($q) use ($request){
                 $q->whereIn('tags.id', (array) $request['tags']);
@@ -108,15 +99,18 @@ class BlogController extends Controller
         }
         $validated = $request->validated();
         $tags = $validated['tags'] ?? [];
-        if((!($validated['publication_status']=='published'))&& !$request->has('published_at')){
-            $validated['published_at'] = null;
-        }
         unset($validated['tags']);
-        if(($request->has('published_at')) && ($validated['publication_status'] ?? null) !== 'draft'){
-            $validated['published_at'] = $validated['published_at']??now();
-            $validated['publication_status'] = 'published';
+
+        $newStatus = $validated['publication_status'] ?? $blog->publication_status;
+        if($newStatus === 'published'){
+            $validated['published_at'] = $validated['published_at'] ?? $blog->published_at ?? now();
+        } else {
+            unset($validated['published_at']);
+            if($request->has('publication_status')){
+                $validated['published_at'] = null;
+            }
         }
-        
+
         $blog->update($validated);
         $blog->tags()->sync($tags);
         return response('',200);

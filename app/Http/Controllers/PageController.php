@@ -19,20 +19,14 @@ class PageController extends Controller
         ->when($request->has('publish_status'), function ($query) use ($request){
             $query->where('publication_status', $request['publish_status']);
         })
-        ->when($request->has('title'), function($query) use($request){
-            $query->where('title', $request['title']);
-        })
-        ->when($request->has('content'), function($query) use($request){
-            $query->where('content', $request['content']);
-        })
         ->when($request->has('order'), function($query) use($request){
             $query->when($request['order']=='title', function($q){
                 $q->orderBy('title', 'asc');
             });
-            $query->when($request['order']=='title', function($q){
+            $query->when($request['order']=='created_at', function($q){
                 $q->orderBy('created_at', 'asc');
             });
-            $query->when($request['order']=='title', function($q){
+            $query->when($request['order']=='updated_at', function($q){
                 $q->orderBy('updated_At', 'asc');
             });
         })
@@ -73,17 +67,19 @@ class PageController extends Controller
     public function update(UpdatePageRequest $request, Page $page)
     {
         if($request->user()->cannot('admin')){
-            abort(402);
+            abort(403);
         }
-        $validate = $request->validated();
-        if((($validate['publication_status']=='draft'))&& !$request->has('publication_date')){
-            $validate['publication_date'] = null;
+        $validated = $request->validated();
+        $newStatus = $validated['publication_status'] ?? $page->publication_status;
+        if($newStatus === 'published'){
+            $validated['published_date'] = $validated['published_date'] ?? $page->published_date ?? now();
+        } else {
+            unset($validated['published_date']);
+            if($request->has('publication_status')){
+                $validated['published_date'] = null;
+            }
         }
-        if(($request->has('publication_date')||$validate['publication_status']=='published') && ($validate['publication_status'] ?? null) !== 'draft'){
-            $validate['publication_date'] = $request['publication_date']??now();
-            $validate['publication_status'] = 'published';
-        }
-        $page->update($validate);
+        $page->update($validated);
         return response('',200);
     }
 
@@ -100,7 +96,7 @@ class PageController extends Controller
     }
        //for public end point viewing, only shows published pages
     public function publicViewIndex(){
-        $pages = Page::where('publication_status', '=', 'published')->get();
+        $pages = Page::where('publication_status', '=', 'published')->cursorPaginate(15);
         return PageResource::collection($pages);
     }
     //for public end point viewing a single page by slug, only shows published pages
