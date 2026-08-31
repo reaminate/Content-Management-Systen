@@ -5,8 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Author;
 use App\Http\Requests\StoreAuthorRequest;
 use App\Http\Requests\UpdateAuthorRequest;
+use App\Notifications\AuthorCreated;
+use App\Notifications\AuthorDeleted;
+use App\Notifications\AuthorUpdated;
 use Illuminate\Http\Request;
 use App\Http\Resources\AuthorResource;
+use function Laravel\Prompts\notify;
 class AuthorController extends Controller
 {
     /**
@@ -35,8 +39,8 @@ class AuthorController extends Controller
 
         $author = Author::create($validated);
         $author->image()->update(['for_author'=>true]);
-
-        return response()->json(null, 201);
+        $request->user()->notify(new AuthorCreated($author));
+        return response()->noContent(201);
     }
 
     /**
@@ -66,15 +70,19 @@ class AuthorController extends Controller
             return response('', 200);
         }
         $author->update($validate);
+        $changes = $author->getChanges();
+        $request->user()->notify(new AuthorUpdated($author, $changes));
         return response( '',200);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Author $author)
+    public function destroy(Author $author, Request $request)
     {
         $author->delete();
+        $request->user()->notify(new AuthorDeleted());
         return response()->noContent();
+
     }
 }
