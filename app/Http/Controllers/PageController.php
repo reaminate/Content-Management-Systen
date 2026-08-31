@@ -6,6 +6,8 @@ use App\Http\Resources\PageResource;
 use App\Models\Page;
 use App\Http\Requests\StorePageRequest;
 use App\Http\Requests\UpdatePageRequest;
+use App\Notifications\PageCreated;
+use App\Notifications\PageUpdated;
 use Illuminate\Http\Request;
 
 class PageController extends Controller
@@ -46,7 +48,9 @@ class PageController extends Controller
         }
         $validated = $request->validated();
 
-        Page::create($validated);
+        $page = Page::create($validated);
+
+        $request->user()->notify(new PageCreated($page));
 
         return response()->noContent(201);
     }
@@ -80,6 +84,7 @@ class PageController extends Controller
             }
         }
         $page->update($validated);
+        $request->user()->notify(new PageUpdated($page));
         return response('',200);
     }
 

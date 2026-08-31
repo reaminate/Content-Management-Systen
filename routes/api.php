@@ -13,6 +13,7 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RecoverController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\NotificationController;
 
 //public api endpoint
 Route::post('/login', [AuthController::class, 'login']);
@@ -40,6 +41,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('blog', BlogController::class);
     Route::apiResource('author', AuthorController::class);
     Route::apiResource('page', PageController::class);
+    Route::get('/notifications', [NotificationController::class, 'index']);
     Route::get('/user/self', [UserController::class, 'showSelf']);
     Route::put('/user/{user}/admin', [UserController::class, 'makeUserAdmin']);
     Route::apiResource('user', UserController::class)->except(['store']);

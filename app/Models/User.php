@@ -4,6 +4,8 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,11 +15,12 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 #[Fillable(['name', 'email', 'password', 'active_status', 'is_admin'])]
 #[Hidden(['password', 'remember_token', 'is_admin'])]
-class User extends Authenticatable
+class User extends Authenticatable implements ShouldQueue
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
-    use HasApiTokens, Notifiable;
+    use HasApiTokens;
+    use Queueable;
 
     /**
      * Get the attributes that should be cast.

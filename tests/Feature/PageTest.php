@@ -5,8 +5,11 @@ namespace Tests\Feature;
 use App\Models\Image;
 use App\Models\Page;
 use App\Models\User;
+use App\Notifications\PageCreated;
+use App\Notifications\PageUpdated;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Notification;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
@@ -16,7 +19,11 @@ class PageTest extends TestCase
     //creates a page to test
     public function test_page_can_be_created(): void
     {
-        Sanctum::actingAs(User::factory(['is_admin'=>true])->create());
+        $user = User::factory(['is_admin'=>true])->create();
+        $user_not = User::factory()->create(); //not admin user
+        Sanctum::actingAs($user);
+        Notification::fake();
+        Notification::assertNothingSentTo($user);
         Image::factory()->create();
         $page = Page::factory()->make();
         $response = $this->postJson('/api/page', [
@@ -28,6 +35,8 @@ class PageTest extends TestCase
             'SEO_description' => $page->SEO_description,
         ]);
         $response->assertStatus(201);
+        Notification::assertSentTo([$user], PageCreated::class);
+        Notification::assertNotSentTo([$user_not], PageCreated::class);
     }
     //creates two pages with the same title. Slug is automatically generated via title
     public function test_title_and_slug_validation():void
@@ -62,7 +71,9 @@ class PageTest extends TestCase
     //updates the pages image
     public function test_page_update():void
     {
-        Sanctum::actingAs(User::factory(['is_admin'=>true])->create());
+        $user = User::factory(['is_admin'=>true])->create();
+        Sanctum::actingAs($user);
+        Notification::fake();
         $image1 = Image::factory()->create();
         $image2 = Image::factory()->create();
         $page = Page::factory([
@@ -73,6 +84,9 @@ class PageTest extends TestCase
             'content_image' => $image2->id,
         ]);
         $response->assertStatus(200);
+        Notification::assertSentTo([$user], PageUpdated::class);
+        
+    
     }
     //creates and then deletes that page
     public function test_page_deletion():void

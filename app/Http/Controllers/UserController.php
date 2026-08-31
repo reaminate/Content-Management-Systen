@@ -58,13 +58,16 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user)
     {
+        if($request->has('is_admin') && $request->user()->can('admin')){
+            $validated['is_admin'] = $request['is_admin'];
+        }
+        if($request->user()->cannot('updateDelete', $user)){
+            abort(403);
+        }
         if (!$request->has('password')){
             return response()->json([
                 'error'=> 'Password is required to update information'
             ], 400);
-        }
-        if($request->user()->cannot('updateDelete', $user)){
-            abort(403);
         }
         $validated = $request->validated();
         
@@ -78,9 +81,7 @@ class UserController extends Controller
             unset($validated['new_password']);
             $validated['password'] = $new_passowrd;
         }
-        if($request->has('is_admin') && $request->user()->can('admin')){
-            $validated['is_admin'] = $request['is_admin'];
-        }
+        
         $user->update($validated);
 
         return response('',200);

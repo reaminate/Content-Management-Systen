@@ -15,6 +15,7 @@ class Page extends Model
     /** @use HasFactory<\Database\Factories\Models\PageFactory> */
     use HasFactory;
     use SoftDeletes;
+
     protected $fillable = ['title', 'content', 'content_image', 'description', 'publication_status', 'published_date', 'SEO_title', 'SEO_description'];
 
     public function image(): BelongsTo
