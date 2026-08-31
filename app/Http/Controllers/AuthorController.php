@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Author;
 use App\Http\Requests\StoreAuthorRequest;
 use App\Http\Requests\UpdateAuthorRequest;
+use App\Models\Image;
 use App\Notifications\AuthorCreated;
 use App\Notifications\AuthorDeleted;
 use App\Notifications\AuthorUpdated;
+use App\Notifications\ImageUpdated;
 use Illuminate\Http\Request;
 use App\Http\Resources\AuthorResource;
 use function Laravel\Prompts\notify;
@@ -65,8 +67,14 @@ class AuthorController extends Controller
         $validate = $request->validated();
         if($request->has('profile_pic')){
             $author->image()->update(['for_author'=>false]);
+            $image = Image::findOrFail($author->image->id);
+            $request->user()->notify(new ImageUpdated($image));
             $author->update($validate);
+            $changes = $author->getChanges();
+            $request->user()->notify(new AuthorUpdated($author, $changes));
             $author->image()->update(['for_author'=>true]);
+            $image = Image::findOrFail($validate['profile_pic']);
+            $request->user()->notify(new ImageUpdated($image));
             return response('', 200);
         }
         $author->update($validate);
