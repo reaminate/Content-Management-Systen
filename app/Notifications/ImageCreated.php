@@ -27,7 +27,7 @@ class ImageCreated extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['dtabase'];
+        return ['database'];
     }
 
     /**
@@ -38,7 +38,11 @@ class ImageCreated extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            
+            'id' =>$this->image->id,
+            'original_filename' => $this->image->original_filename,
+            'stored_filename' => $this->image->stored_filename,
+            'file_type' => $this->image->file_type,
+            'caption' => $this->image->caption,
         ];
     }
 }

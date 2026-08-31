@@ -6,6 +6,7 @@ use App\Models\Author;
 use App\Models\Image;
 use App\Models\Page;
 use App\Models\Blog;
+use App\Notifications\ImageDeleted;
 use App\Notifications\PageDeleted;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -55,11 +56,11 @@ class RecoverController extends Controller
         }
         if($request->has('images')){
             Image::withTrashed()->findOrFail($id)->forceDelete();
+            $request->user()->notify(new ImageDeleted());
         }
         if($request->has('pages')){
-            $page = Page::withTrashed()->findOrFail($id);
-            $page->forceDelete();
-            $request->user()->notify(new PageDeleted($page));
+            Page::withTrashed()->findOrFail($id)->forceDelete();
+            $request->user()->notify(new PageDeleted());
         }
         if($request->has('blogs')){
             Blog::withTrashed()->findOrFail($id)->forceDelete();

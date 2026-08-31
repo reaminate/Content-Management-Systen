@@ -4,9 +4,12 @@ namespace Tests\Feature;
 
 use App\Models\Image;
 use App\Models\User;
+use App\Notifications\ImageCreated;
+use App\Notifications\ImageUpdated;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
@@ -17,9 +20,10 @@ class ImageTest extends TestCase
     //tests whether only valid images can be uploaded
     public function test_valid_image_can_be_uploaded(): void
     {
-        Sanctum::actingAs(User::factory()->create());
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
         Storage::fake('public');
-
+        Notification::fake();
         $file = new UploadedFile(
             base_path('tests/Fixtures/images/jpeg-01-100x100.jpg'),
             'test.jpg',
@@ -32,6 +36,7 @@ class ImageTest extends TestCase
             'stored_filename'=> 'test',
             'caption' => 'caption',
         ]);
+        Notification::assertSentTo([$user], ImageCreated::class);
         $response->assertStatus(201);
         $file_gif = new UploadedFile(
             base_path('tests/Fixtures/images/mxj_files-seagull-27431.gif'),
@@ -55,8 +60,9 @@ class ImageTest extends TestCase
     //tests whether the metadata(caption) can be updated without touching the file
     public function test_updating_images_metadata():void
     {
-        Sanctum::actingAs(User::factory()->create());
-
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+        Notification::fake();
         $image = Image::factory()->create([
             'caption' => 'caption',
         ]);
@@ -64,6 +70,7 @@ class ImageTest extends TestCase
         $response = $this->patchJson("/api/image/{$image->stored_filename}", [
             'caption' => 'update caption',
         ]);
+        Notification::assertSentTo([$user], ImageUpdated::class);
 
         $response->assertStatus(200);
         $this->assertDatabaseHas('images', [

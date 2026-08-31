@@ -2,20 +2,20 @@
 
 namespace App\Notifications;
 
-use App\Models\Page;
+use App\Models\Image;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class PageUpdated extends Notification implements ShouldQueue
+class ImageUpdated extends Notification
 {
     use Queueable;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct(public Page $page, public array $changes = [])
+    public function __construct(public Image $image, public array $changes = [])
     {
         //
     }
@@ -30,8 +30,6 @@ class PageUpdated extends Notification implements ShouldQueue
         return ['database'];
     }
 
-    
-
     /**
      * Get the array representation of the notification.
      *
@@ -40,7 +38,7 @@ class PageUpdated extends Notification implements ShouldQueue
     public function toArray(object $notifiable): array
     {
         return [
-            'page_id' => $this->page->id,
+            'id' => $this->image->id,
             'changes' => $this->changes,
         ];
     }

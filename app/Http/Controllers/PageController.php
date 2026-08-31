@@ -84,7 +84,8 @@ class PageController extends Controller
             }
         }
         $page->update($validated);
-        $request->user()->notify(new PageUpdated($page));
+        $changes = $page->getChanges();
+        $request->user()->notify(new PageUpdated($page, $changes));
         return response('',200);
     }
 

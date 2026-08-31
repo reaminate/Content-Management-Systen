@@ -6,6 +6,8 @@ use App\Http\Resources\ImageResource;
 use App\Models\Image;
 use App\Http\Requests\StoreImageRequest;
 use App\Http\Requests\UpdateImageRequest;
+use App\Notifications\ImageCreated;
+use App\Notifications\ImageUpdated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -42,7 +44,7 @@ class ImageController extends Controller
         $file = $validated['image'];
         $storedPath = $file->store('images', 'public');
 
-        Image::create([
+        $image = Image::create([
             'original_filename' => $file->getClientOriginalName(),
             'stored_filename' => $validated['stored_filename'],
             'file_path' => $storedPath,
@@ -52,7 +54,7 @@ class ImageController extends Controller
             'caption' => $validated['caption'] ?? null,
             'upload_date' => now(),
         ]);
-
+        $request->user()->notify(new ImageCreated($image));
         return response()->noContent(201);
     }
 
@@ -96,6 +98,8 @@ class ImageController extends Controller
         }
 
         $image->update($validated);
+        $changes = $image->getChanges();
+        $request->user()->notify(new ImageUpdated($image, $changes));
         return response('',200);
     }
 

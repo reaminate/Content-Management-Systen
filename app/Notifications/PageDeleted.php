@@ -15,7 +15,7 @@ class PageDeleted extends Notification implements ShouldQueue
     /**
      * Create a new notification instance.
      */
-    public function __construct(public Page $page)
+    public function __construct()
     {
         //
     }
