@@ -8,8 +8,12 @@ use App\Models\Category;
 use App\Models\Image;
 use App\Models\Tag;
 use App\Models\User;
+use App\Notifications\BlogCreated;
+use App\Notifications\BlogDeleted;
+use App\Notifications\BlogUpdated;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Notification;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
@@ -19,15 +23,18 @@ class BlogTest extends TestCase
     //creates a simple blog
     public function test_creating_blog(): void
     {
-        Sanctum::actingAs(User::factory()->create());
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
         Image::factory()->create();
         Author::factory()->create();
         Image::factory()->create();
         Category::factory()->create();
         Tag::factory()->count(7)->create();
         $blog = Blog::factory()->make()->toArray();
+        Notification::fake();
 
         $response = $this->postJson('/api/blog', $blog);
+        Notification::assertSentTo([$user], BlogCreated::class);
         $response->assertStatus(201);
     }
     //trying to create a blog with invalid category
@@ -78,16 +85,19 @@ class BlogTest extends TestCase
             'user_id' => $user->id,
         ])->create();
         Image::factory()->create();
+        Notification::fake();
         $category1 = Category::factory()->create();
         $category2 = Category::factory()->create();
         $blog = Blog::factory([
             'author_id' => $author->id,
             'category_id' => $category1->id,
         ])->create();
+        //updating the blog as the author
         $response = $this->putJson("api/blog/{$blog->slug}", [
             'category_id' => $category2->id,
         ]);
         $response->assertStatus(200);
+        Notification::fake();
 
         //trying to update the same blog but as a different author with different user
         $user2 = User::factory()->create();
@@ -100,7 +110,7 @@ class BlogTest extends TestCase
             'category_id' => $category1->id,
         ]);
         $response->assertStatus(403);
-
+        Notification::assertNothingSent();
         //trying to update that same blog but as differnet user 
         $user3 = User::factory()->create();
         Image::factory()->create();
@@ -109,6 +119,7 @@ class BlogTest extends TestCase
             'category_id' => $category2->id,
         ]);
         $response->assertStatus(403);
+        Notification::assertNothingSent();
     }
     //changes the tag relationships of the blog
     public function test_changing_the_tags_of_a_blog(): void
@@ -242,16 +253,17 @@ class BlogTest extends TestCase
         Category::factory()->create();
         Tag::factory()->count(7)->create();
         $blog = Blog::factory()->create();
-
+        Notification::fake();
         //should fail as you are not a logged in author
         Sanctum::actingAs($user); //need to be logged to view anything
         $response = $this->deleteJson("api/blog/{$blog->slug}");
         $response->assertStatus(403);
-
+        Notification::assertNothingSent();
         //should pass as you are the admin
         Sanctum::actingAs($user_admin); 
         $response = $this->deleteJson("api/blog/{$blog->slug}");
         $response->assertStatus(204);
+        Notification::assertNotSentTo([$user_admin], BlogDeleted::class);
     }
 
     //deletes a soft deleted model (blog)

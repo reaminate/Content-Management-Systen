@@ -6,6 +6,7 @@ use App\Models\Author;
 use App\Models\Image;
 use App\Models\Page;
 use App\Models\Blog;
+use App\Notifications\BlogDeleted;
 use App\Notifications\ImageDeleted;
 use App\Notifications\PageDeleted;
 use Illuminate\Database\Eloquent\Model;
@@ -64,6 +65,7 @@ class RecoverController extends Controller
         }
         if($request->has('blogs')){
             Blog::withTrashed()->findOrFail($id)->forceDelete();
+            $request->user()->notify(new BlogDeleted());
         }
         return response()->noContent();
     }

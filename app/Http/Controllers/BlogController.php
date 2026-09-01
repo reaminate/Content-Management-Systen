@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Blog;
 use App\Http\Requests\StoreBlogRequest;
 use App\Http\Requests\UpdateBlogRequest;
+use App\Notifications\BlogCreated;
+use App\Notifications\BlogUpdated;
 use Illuminate\Http\Request;
 use App\Http\Resources\BlogResource;
 class BlogController extends Controller
@@ -65,7 +67,7 @@ class BlogController extends Controller
 
         $blog = Blog::create($validate);
         $blog->tags()->sync($tags);
-
+        $request->user()->notify(new BlogCreated($blog));
         return response()->noContent(201);
     }
 
@@ -113,6 +115,8 @@ class BlogController extends Controller
 
         $blog->update($validated);
         $blog->tags()->sync($tags);
+        $changes = $blog->getChanges();
+        $request->user()->notify(new BlogUpdated($blog, $changes));
         return response('',200);
     }
 

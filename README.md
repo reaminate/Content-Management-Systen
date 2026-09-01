@@ -32,3 +32,6 @@ For all the operations
     delete 
     loggout 
 You will need to login.
+
+## Notifications
+for notifications to work you will need to have a worker running
