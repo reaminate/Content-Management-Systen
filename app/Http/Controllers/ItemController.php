@@ -6,6 +6,9 @@ use App\Http\Resources\ItemResource;
 use App\Models\Item;
 use App\Http\Requests\StoreItemRequest;
 use App\Http\Requests\UpdateItemRequest;
+use App\Notifications\ItemCreated;
+use App\Notifications\ItemDeleted;
+use App\Notifications\ItemUpdated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -28,7 +31,8 @@ class ItemController extends Controller
             abort(403);
         }
         $validate = $request->validated();
-        Item::create($validate);
+        $item = Item::create($validate);
+        $request->user()->notify(new ItemCreated($item));
         return response()->noContent(201);
     }
 
@@ -73,6 +77,9 @@ class ItemController extends Controller
             $item->update($validated);
         });
 
+        $changes = $item->getChanges();
+        $request->user()->notify(new ItemUpdated($item, $changes));
+
         return response('',200);
 
     }
@@ -86,6 +93,7 @@ class ItemController extends Controller
             abort(403);
         }
         $item->delete();
+        $request->user()->notify(new ItemDeleted());
 
         return response()->noContent();
     }

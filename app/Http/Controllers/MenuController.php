@@ -6,6 +6,9 @@ use App\Http\Resources\MenuResource;
 use App\Models\Menu;
 use App\Http\Requests\StoreMenuRequest;
 use App\Http\Requests\UpdateMenuRequest;
+use App\Notifications\MenuCreated;
+use App\Notifications\MenuDeleted;
+use App\Notifications\MenuUpdated;
 use Illuminate\Http\Request;
 
 class MenuController extends Controller
@@ -27,7 +30,8 @@ class MenuController extends Controller
             abort(403);
         }
         $validated = $request->validated();
-        Menu::create($validated);
+        $menu = Menu::create($validated);
+        $request->user()->notify(new MenuCreated($menu));
 
         return response()->noContent(201);
     }
@@ -53,9 +57,11 @@ class MenuController extends Controller
         }
         $validated = $request->validated();
         $menu->update($validated);
+        $changes = $menu->getChanges();
+        $request->user()->notify(new MenuUpdated($menu, $changes));
 
         return response('',200);
-        
+
     }
 
     /**
@@ -67,6 +73,7 @@ class MenuController extends Controller
             abort(403);
         }
         $menu->delete();
+        $request->user()->notify(new MenuDeleted());
         return response()->noContent();
     }
     public function view(Menu $menu){

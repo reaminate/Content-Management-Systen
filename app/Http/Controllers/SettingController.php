@@ -6,6 +6,7 @@ use App\Http\Resources\SettingResource;
 use App\Models\Setting;
 
 use App\Http\Requests\UpdateSettingRequest;
+use App\Notifications\SettingUpdated;
 
 class SettingController extends Controller
 {
@@ -28,7 +29,8 @@ class SettingController extends Controller
         $validated = $request->validated();
 
         $setting->update($validated);
-
+        $changes = $setting->getChanges();
+        $request->user()->notify(new SettingUpdated($changes));
         return response(200);
     }
 }
