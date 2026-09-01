@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Category;
 use App\Models\Image;
 use App\Models\Page;
 use App\Models\Tag;
@@ -27,10 +28,12 @@ class NotificationTest extends TestCase
                 ->assertStatus(201);
             $this->postJson('api/tag', Tag::factory()->make()->toArray())
                 ->assertStatus(201);
+            $this->postJson('api/category', Category::factory()->make()->toArray())
+                ->assertStatus(201);
         }
 
         $response = $this->getJson('api/notifications');
         $response->assertStatus(200);
-        $response->assertJsonCount(8, 'data');
+        $response->assertJsonCount(12, 'data');
     }
 }

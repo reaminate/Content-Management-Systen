@@ -7,6 +7,9 @@ use App\Http\Resources\BlogResource;
 use App\Models\Category;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
+use App\Notifications\CategoryCreated;
+use App\Notifications\CategoryDeleted;
+use App\Notifications\CategoryUpdated;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -29,9 +32,12 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
-
+        if($request->user()->cannot('admin')){
+            abort(403);
+        }
         $validated = $request->validated();
-        Category::create($validated);
+        $category = Category::create($validated);
+        $request->user()->notify(new CategoryCreated($category));
         return response()->noContent(201);
     }
 
@@ -51,9 +57,13 @@ class CategoryController extends Controller
      */
     public function update(UpdateCategoryRequest $request, Category $category)
     {
-        
+        if($request->user()->cannot('admin')){
+            abort(403);
+        }
         $validated = $request->validated();
         $category->update($validated);
+        $changes = $category->getChanges();
+        $request->user()->notify(new CategoryUpdated($category, $changes));
         return response('',200);
     }
 
@@ -66,6 +76,7 @@ class CategoryController extends Controller
             abort(403);
         }
         $category->delete();
+        $request->user()->notify(new CategoryDeleted());
         return response()->noContent();
     }
     //for public viewing of active categories

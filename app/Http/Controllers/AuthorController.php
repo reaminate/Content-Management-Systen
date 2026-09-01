@@ -64,25 +64,22 @@ class AuthorController extends Controller
      */
     public function update(UpdateAuthorRequest $request, Author $author)
     {
-        $validate = $request->validated();
-        if($request->has('profile_pic')){
-            $author->image()->update(['for_author'=>false]);
-            $image = Image::findOrFail($author->image->id);
-            $request->user()->notify(new ImageUpdated($image));
-            $author->update($validate);
-            $changes = $author->getChanges();
-            $request->user()->notify(new AuthorUpdated($author, $changes));
-            $author->image()->update(['for_author'=>true]);
-            $image = Image::findOrFail($validate['profile_pic']);
-            $request->user()->notify(new ImageUpdated($image));
-            return response('', 200);
-        }
-        $author->update($validate);
+        $validated = $request->validated();
+        $author->update($validated);
         $changes = $author->getChanges();
+        if(!isset($changes['profile_pic'])){
+            $request->user()->notify(new AuthorUpdated($author, $changes));
+            return response( '',200);
+        }
+        $prev_profile_pic_id = $author->getPrevious()['profile_pic'];
+        $prev_profile_pic = Image::findOrFail($prev_profile_pic_id);
+        $prev_profile_pic->update(['for_author'=>false]);
+        $request->user()->notify(new ImageUpdated($prev_profile_pic, $changes));
+        $author->image()->update(['for_author'=>true]);
         $request->user()->notify(new AuthorUpdated($author, $changes));
+        $request->user()->notify(new ImageUpdated($author->image, $changes));
         return response( '',200);
     }
-
     /**
      * Remove the specified resource from storage.
      */

@@ -28,6 +28,9 @@ class TagController extends Controller
      */
     public function store(StoreTagRequest $request)
     {
+        if($request->user()->cannot('admin')){
+            abort(403);
+        }
         $validated = $request->validated();
         $tag = Tag::create($validated);
         $request->user()->notify(new TagCreated($tag));
@@ -50,6 +53,9 @@ class TagController extends Controller
      */
     public function update(UpdateTagRequest $request, Tag $tag)
     {
+        if($request->user()->cannot('admin')){
+            abort(403);
+        }
         $validated = $request->validated();
         
         $tag->update($validated);

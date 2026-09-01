@@ -12,7 +12,7 @@ class Category extends Model
 {
     /** @use HasFactory<\Database\Factories\Models\CategoryFactory> */
     use HasFactory;
-    protected $fillable = ['name', 'description'];
+    protected $fillable = ['name', 'description', 'active_status'];
 
     public function blog(): HasMany
     {

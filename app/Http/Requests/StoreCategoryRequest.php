@@ -25,6 +25,7 @@ class StoreCategoryRequest extends FormRequest
         return [
             'name' =>['required','string'],
             'description' => ['required','string'],
+            'active_status' => ['required','boolean'],
         ];
     }
 }
