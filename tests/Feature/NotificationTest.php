@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Image;
 use App\Models\Page;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -24,10 +25,12 @@ class NotificationTest extends TestCase
         for ($i = 0; $i < 4; $i++) {
             $this->postJson('api/page', Page::factory()->make()->toArray())
                 ->assertStatus(201);
+            $this->postJson('api/tag', Tag::factory()->make()->toArray())
+                ->assertStatus(201);
         }
 
         $response = $this->getJson('api/notifications');
         $response->assertStatus(200);
-        $response->assertJsonCount(4, 'data');
+        $response->assertJsonCount(8, 'data');
     }
 }
