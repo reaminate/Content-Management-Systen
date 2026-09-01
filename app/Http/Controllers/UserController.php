@@ -6,6 +6,9 @@ use App\Http\Requests\MakeUserAdminRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
+use App\Notifications\UserCreated;
+use App\Notifications\UserDeleted;
+use App\Notifications\UserUpdated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
@@ -34,8 +37,8 @@ class UserController extends Controller
         if($request->has('is_admin')){
             $validated['is_admin'] = false;
         }
-        User::create($validated);
-
+        $user = User::create($validated);
+        $request->user()->notify(new UserCreated($user));
         return response()->noContent(201);
 
     }
@@ -83,7 +86,8 @@ class UserController extends Controller
         }
         
         $user->update($validated);
-
+        $changes = $user->getChanges();
+        $request->user()->notify(new UserUpdated($user, $changes));
         return response('',200);
     }
     public function makeUserAdmin(MakeUserAdminRequest $request, User $user){
@@ -92,7 +96,8 @@ class UserController extends Controller
         }
         $validated = $request->validated();
         $user->update($validated);
-
+        $changes = $user->getChanges();
+        $request->user()->notify(new UserUpdated($user, $changes));
         return response('', 200);
     }
     /**
@@ -104,6 +109,7 @@ class UserController extends Controller
             abort(403);
         }
         $user->delete();
+        $request->user()->notify(new UserDeleted());
         return response()->noContent();
     }
 }
