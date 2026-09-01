@@ -19,6 +19,7 @@ class BlogResource extends JsonResource
             'title' => $this->title,
             'excerpt' => $this->excerpt,
             'content' => $this->content,
+            'publication_status' => $this->publication_status,
             'tags' => TagCollection::make($this->whenLoaded('tags')),
             'author' => AuthorResource::make($this->whenLoaded('author')),
             'image' => ImageResource::make($this->whenLoaded('image')),

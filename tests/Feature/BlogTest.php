@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Jobs\SummarizePost;
 use App\Models\Author;
 use App\Models\Blog;
 use App\Models\Category;
@@ -14,6 +15,7 @@ use App\Notifications\BlogUpdated;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Queue;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
@@ -30,9 +32,9 @@ class BlogTest extends TestCase
         Image::factory()->create();
         Category::factory()->create();
         Tag::factory()->count(7)->create();
-        $blog = Blog::factory()->make()->toArray();
+        $blog = Blog::factory(['publication_status' => 'published'])->make()->toArray();
         Notification::fake();
-
+        Queue::fake();
         $response = $this->postJson('/api/blog', $blog);
         Notification::assertSentTo([$user], BlogCreated::class);
         $response->assertStatus(201);

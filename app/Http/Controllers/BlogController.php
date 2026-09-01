@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Blog;
 use App\Http\Requests\StoreBlogRequest;
 use App\Http\Requests\UpdateBlogRequest;
+use App\Jobs\SummarizePost;
 use App\Notifications\BlogCreated;
 use App\Notifications\BlogUpdated;
 use Illuminate\Http\Request;
@@ -67,7 +68,12 @@ class BlogController extends Controller
 
         $blog = Blog::create($validate);
         $blog->tags()->sync($tags);
+
         $request->user()->notify(new BlogCreated($blog));
+
+        if($request['publication_status'] == 'published'){
+            SummarizePost::dispatch($blog);
+        }
         return response()->noContent(201);
     }
 
@@ -103,6 +109,7 @@ class BlogController extends Controller
         $tags = $validated['tags'] ?? [];
         unset($validated['tags']);
 
+        $wasPublished = $blog->publication_status === 'published';
         $newStatus = $validated['publication_status'] ?? $blog->publication_status;
         if($newStatus === 'published'){
             $validated['published_at'] = $validated['published_at'] ?? $blog->published_at ?? now();
@@ -117,6 +124,11 @@ class BlogController extends Controller
         $blog->tags()->sync($tags);
         $changes = $blog->getChanges();
         $request->user()->notify(new BlogUpdated($blog, $changes));
+
+        if($newStatus === 'published' && !$wasPublished){
+            SummarizePost::dispatch($blog);
+        }
+
         return response('',200);
     }
 

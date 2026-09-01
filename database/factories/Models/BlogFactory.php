@@ -29,10 +29,10 @@ class BlogFactory extends Factory
             $publication_status = fake()->randomElement(['draft', 'archived']);
         }
         return [
-            'title'=>fake()->unique()->sentence(20, true),
+            'title'=>fake()->unique()->sentence(1),
             'category_id'=>$this->faker->randomElement(Category::pluck('id')),
             'excerpt' => fake()->sentence(10, true),
-            'content' => fake()->realTextBetween(20, 30),
+            'content' => fake()->realTextBetween(100, 200),
             'image_id'=> $this->faker->randomElement(Image::where('for_author', false)->pluck('id')),
             'author_id' => $this->faker->randomElement(Author::pluck('id')),
             'published_at' => $published_date,
