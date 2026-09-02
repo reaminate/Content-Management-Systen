@@ -10,6 +10,8 @@ use App\Notifications\BlogCreated;
 use App\Notifications\BlogUpdated;
 use Illuminate\Http\Request;
 use App\Http\Resources\BlogResource;
+use Spatie\SimpleExcel\SimpleExcelReader;
+use Spatie\SimpleExcel\SimpleExcelWriter;
 class BlogController extends Controller
 {
     /**
@@ -154,5 +156,46 @@ class BlogController extends Controller
             abort(404);
         }
         return BlogResource::make($blog);
+    }
+
+    public function export(Request $request){
+        if($request->user()->cannot('admin')){
+            abort(403);
+        }
+        $blogs = Blog::all()->toArray();
+        $writer = SimpleExcelWriter::create('export.xlsx');
+        $total_blogs = count($blogs);
+        foreach(range(0, $total_blogs) as $i){
+            $writer->addRow($blogs[$i]);
+            if($i % 20 === 0 ){
+                flush();
+            }
+        }   
+        return response('', 200);
+    }
+    public function import(Request $request){
+        if($request->user()->cannot('admin')){
+            abort(403);
+        }
+        $path = 'export.xlsx';
+        $existingTitles = Blog::pluck('title')->toArray();
+        $new = [];
+        $reader = SimpleExcelReader::create($path)
+        ->fromSheet(1)->getRows();
+        $reader->each(function(array $row) use($existingTitles, &$new){
+            if(in_array($row['title'], $existingTitles)){
+                return;
+            }
+            $new[] = $row;
+        });
+
+        foreach($new as $row){
+            $storeRequest = StoreBlogRequest::create('/blogs', 'POST', $row);
+            $storeRequest->setContainer(app())
+                ->setUserResolver(request()->getUserResolver());
+            $storeRequest->validateResolved();
+
+            $this->store($storeRequest);
+        }
     }
 }

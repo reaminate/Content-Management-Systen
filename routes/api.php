@@ -25,7 +25,6 @@ Route::get('/blog', [BlogController::class, 'publicViewIndex']);
 Route::get('/blog/{blog:slug}', [BlogController::class, 'viewBySlug']);
 Route::get('/categories', [CategoryController::class,'viewPublicActiveCategories']);
 Route::get('/categories/{category}', [CategoryController::class,'viewBlogsForCategory']);
-
 //protected end point
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class,'logout']);
@@ -34,6 +33,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/delete/{id}', [RecoverController::class,'destroy']);
     Route::get('/page/{page:slug}', [PageController::class, 'show']);
     Route::get('/author/{author:name}', [AuthorController::class, 'show']);
+    Route::get('/export', [BlogController::class, 'export']);
+    Route::get('/import', [BlogController::class, 'import']);
+    Route::get('/notifications', [NotificationController::class, 'index']);
+    Route::get('/user/self', [UserController::class, 'showSelf']);
+    Route::put('/user/{user}/admin', [UserController::class, 'makeUserAdmin']);
+    
 
     Route::apiResource('category', CategoryController::class);
     Route::apiResource('image', ImageController::class);
@@ -41,9 +46,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('blog', BlogController::class);
     Route::apiResource('author', AuthorController::class);
     Route::apiResource('page', PageController::class);
-    Route::get('/notifications', [NotificationController::class, 'index']);
-    Route::get('/user/self', [UserController::class, 'showSelf']);
-    Route::put('/user/{user}/admin', [UserController::class, 'makeUserAdmin']);
     Route::apiResource('user', UserController::class)->except(['store']);
     Route::apiResource('menu', MenuController::class);
     Route::apiResource('item', ItemController::class);
