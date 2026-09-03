@@ -164,13 +164,7 @@ class BlogController extends Controller
         }
         $blogs = Blog::all()->toArray();
         $writer = SimpleExcelWriter::create('export.xlsx');
-        $total_blogs = count($blogs);
-        foreach(range(0, $total_blogs) as $i){
-            $writer->addRow($blogs[$i]);
-            if($i % 20 === 0 ){
-                flush();
-            }
-        }   
+        $writer->addRows($blogs);
         return response('', 200);
     }
     public function import(Request $request){
