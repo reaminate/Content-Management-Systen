@@ -31,9 +31,17 @@ class NotificationTest extends TestCase
             $this->postJson('api/category', Category::factory()->make()->toArray())
                 ->assertStatus(201);
         }
+        //only the person that made those gets the notifications
+        Sanctum::actingAs(User::factory()->create());
+        $response = $this->getJson('api/notifications');
+        $response->assertJsonCount(0);
 
+        Sanctum::actingAs($user);
         $response = $this->getJson('api/notifications');
         $response->assertStatus(200);
-        $response->assertJsonCount(12, 'data');
+        $response->assertJsonCount(12);
+        //marked as read, next time its accessed, no notifications should be there
+        $response = $this->getJson('api/notifications');
+        $response->assertJsonCount(0);
     }
 }
